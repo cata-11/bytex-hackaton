@@ -12,9 +12,7 @@ exports.signup = async (req, res, next) => {
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
   const username = req.body.username;
-
-  console.log(req.body);
-
+  
   User.findOne({
     where: Sequelize.or(
       {
@@ -90,6 +88,37 @@ exports.login = (req, res, next) => {
         lastname: user.lastname,
         email: user.email,
         id: user.id
+      });
+    })
+    .catch((err) => next(err));
+};
+
+exports.addPoints = (req, res, next) => {
+  const id = req.body.id;
+  let points = parseInt(req.body.points);
+  const pointsToAdd = points;
+
+  User.findOne({ where: { id: id } })
+    .then((result) => {
+      points = points + parseInt(result.score);
+      User.update({ score: points }, { where: { id: id } })
+        .then((result2) => {
+          res.status(201).json({
+            msg: `Added ${pointsToAdd} points to user.`
+          });
+        })
+        .catch((err) => next(err));
+    })
+    .catch((err) => next(err));
+};
+
+exports.findByUsername = (req, res, next) => {
+  const username = req.params.username;
+
+  User.findOne({ where: { username: username } })
+    .then((result) => {
+      res.status(200).json({
+        user: result
       });
     })
     .catch((err) => next(err));
