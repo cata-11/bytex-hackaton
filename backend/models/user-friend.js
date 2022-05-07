@@ -2,11 +2,10 @@ const Sequelize = require('sequelize');
 const db = require('../util/database');
 
 const User = require('./user');
-const Event = require('./event');
 
-const UserEvent = db.define(
-    'users_events', {
-        user_id: {
+const UserFriend = db.define(
+    'users_friends', {
+        id_from: {
             type: Sequelize.BIGINT,
             primaryKey: true,
             references: {
@@ -14,18 +13,17 @@ const UserEvent = db.define(
                 key: "id",
             },
         },
-
-        event_id: {
+        id_to: {
             type: Sequelize.BIGINT,
             primaryKey: true,
             references: {
-                model: Event,
+                model: User,
                 key: "id",
-            }
+            },
         },
     }, {
         timestamps: false,
     }
 );
 
-module.exports = UserEvent;
+module.exports = UserFriend;

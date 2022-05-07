@@ -34,7 +34,15 @@ const User = db.define(
         score: {
             type: Sequelize.BIGINT,
             defaultValue: 0,
-        }
+        },
+        latitude: {
+            type: Sequelize.DOUBLE,
+            allowNull: false,
+        },
+        longitude: {
+            type: Sequelize.DOUBLE,
+            allowNull: false,
+        },
     }, {
         timestamps: false,
     }

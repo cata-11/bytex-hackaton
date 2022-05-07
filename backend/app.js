@@ -15,12 +15,14 @@ const { extraSetup } = require('./models/relations')
 extraSetup();
 
 const usersRoutes = require('./routes/users');
-const eventsRoutes = require('./routes/events')
-const users_eventsRoutes = require('./routes/users-events')
+const eventsRoutes = require('./routes/events');
+const users_eventsRoutes = require('./routes/users-events');
+const users_friendsRoutes = require('./routes/users-friends');
 
 app.use(usersRoutes);
 app.use(eventsRoutes);
 app.use(users_eventsRoutes);
+app.use(users_friendsRoutes);
 
 app.use((err, req, res, next) => {
     let message;

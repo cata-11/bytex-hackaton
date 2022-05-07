@@ -22,58 +22,48 @@ exports.addUserToEvent = (req, res, next) => {
 
 exports.findAllForEvent = (req, res, next) => {
     const event_id = req.params.event_id;
-    var users = [];
-    var count = 0;
+    let arr = [];
 
     UserEvent.findAll({ where: { event_id: event_id } })
-        .then(async(result) => {
+        .then((result) => {
             result.forEach((item, index) => {
                 const id = item.dataValues.user_id;
-                User.findOne({ where: { id: id } })
-                    .then((res) => {
-                        users.push(res.dataValues)
-                        console.log(res.dataValues)
-                    })
-                    .catch((err) => {
-                        next(err)
-                        console.log(err)
-                    });
-                console.log("asdasd2")
+                arr.push(
+                    User.findOne({ where: { id: id } })
+                );
             })
 
-            console.log("asdasd")
-            console.log(users);
-            return await Promise.all(users)
-                // .then(values => {
-                //     res.status(200).json({
-                //         users: values,
-                //     });
-                // })
-                // .catch(err => next(err));
+            Promise.all(arr)
+                .then((result2) => {
+                    res.status(200).json({
+                        users: result2,
+                    })
+                })
+                .catch(err => next(err));
         })
         .catch((err) => next(err));
 }
 
 exports.findAllForUser = (req, res, next) => {
     const user_id = req.params.user_id;
+    let arr = [];
 
     UserEvent.findAll({ where: { user_id: user_id } })
         .then((result) => {
-            console.log(result)
+            result.forEach((item, index) => {
+                const id = item.dataValues.event_id;
+                arr.push(
+                    Event.findOne({ where: { id: id } })
+                );
+            })
 
-            const events = new Set();
-            for (let i = 0; i < result.length; ++i) {
-                const id = result[i].dataValues.event_id;
-                console.log(id);
-                const event = Event.findOne({ where: { id: id } })
-                    .then((res) => res)
-                    .catch((err) => next(err));
-                events.add(event);
-            }
-
-            res.status(200).json({
-                events: events,
-            });
+            Promise.all(arr)
+                .then((result2) => {
+                    res.status(200).json({
+                        events: result2,
+                    })
+                })
+                .catch(err => next(err));
         })
         .catch((err) => next(err));
 }

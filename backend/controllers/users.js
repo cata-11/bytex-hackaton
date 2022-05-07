@@ -3,6 +3,7 @@ const User = require('../models/user');
 
 const bcrypt = require('bcrypt');
 const jsonToken = require('jsonwebtoken');
+const UserFriend = require('../models/user-friend');
 
 exports.signup = (req, res, next) => {
     const email = req.body.email;
@@ -10,6 +11,8 @@ exports.signup = (req, res, next) => {
     const firstname = req.body.firstname;
     const lastname = req.body.lastname;
     const username = req.body.username;
+    const latitude = req.body.latitude;
+    const longitude = req.body.longitude;
 
     User.findOne({ where: { email: email } })
         .then((result) => {
@@ -26,7 +29,9 @@ exports.signup = (req, res, next) => {
                 password: result,
                 firstname: firstname,
                 lastname: lastname,
-                username: username
+                username: username,
+                latitude: latitude,
+                longitude: longitude,
             });
             return user;
         })
@@ -110,4 +115,46 @@ exports.findByUsername = (req, res, next) => {
             })
         })
         .catch(err => next(err));
+}
+
+exports.getLeaderboard = (req, res, next) => {
+    User.findAndCountAll({
+            order: [
+                ["score", "DESC"]
+            ],
+            limit: 10,
+            offset: 0,
+        })
+        .then(result => {
+            res.status(200).json({
+                leaderboard: result,
+            })
+        })
+        .catch(err => next(err));
+}
+
+exports.getLeaderboardFriends = (req, res, next) => {
+    const id_from = req.params.id_from;
+    const arr = [];
+
+    UserFriend.findAll({ where: { id_from: id_from } })
+        .then((result) => {
+            result.forEach((item, index) => {
+                const id = item.dataValues.id_to;
+                arr.push(
+                    User.findOne({ where: { id: id } })
+                );
+            })
+
+            Promise.all(arr)
+                .then((result2) => {
+                    result2.sort((a, b) => a.score < b.score)
+
+                    res.status(200).json({
+                        users: result2,
+                    })
+                })
+                .catch(err => next(err));
+        })
+        .catch((err) => next(err));
 }
