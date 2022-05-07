@@ -164,3 +164,17 @@ exports.getLeaderboardFriends = (req, res, next) => {
         })
         .catch((err) => next(err));
 }
+
+exports.setLatLong = (req, res, next) => {
+    const id = req.body.id;
+    const latitude = req.body.latitude;
+    const longitude = req.body.longitude;
+
+    User.update({ latitude: latitude, longitude: longitude }, { where: { id: id } })
+        .then(result => {
+            res.status(201).json({
+                msg: "Updated the user's coordinates.",
+            });
+        })
+        .catch((err) => next(err));
+}
