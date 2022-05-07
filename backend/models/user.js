@@ -1,36 +1,37 @@
-import { DataTypes, Sequelize } from "sequelize";
-import db from "../util/database";
-
+const Sequelize = require('sequelize');
+const db = require('../util/database');
 
 const User = db.define(
-    "user", {
+    "users", {
         id: {
-            type: DataTypes.BIGINT,
+            type: Sequelize.BIGINT,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true,
         },
         email: {
-            type: DataTypes.TEXT,
+            type: Sequelize.STRING,
             allowNull: false,
+            unique: true,
         },
-        first_name: {
-            type: DataTypes.TEXT,
+        firstname: {
+            type: Sequelize.STRING,
         },
-        last_name: {
-            type: DataTypes.TEXT,
+        lastname: {
+            type: Sequelize.STRING,
+        },
+        username: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            unique: true,
         },
         password: {
-            type: DataTypes.TEXT,
+            type: Sequelize.STRING,
             allowNull: false,
         },
-        is_active: {
-            type: DataTypes.BOOLEAN,
-        },
     }, {
-        freezeTableName: true,
         timestamps: false,
     }
 );
 
-module.exports = db.model(User);
+module.exports = User;
