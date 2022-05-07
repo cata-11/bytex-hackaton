@@ -45,7 +45,7 @@ const App = () => {
             <Route path="profile" element={<Profile />} />
 
             <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
+            <Route path="signup" element={<Register />} />
             <Route path="reset-pass" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
