@@ -1,161 +1,201 @@
-import React from "react";
+import * as React from 'react';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormControl from '@mui/material/FormControl';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import { makeStyles } from "@mui/styles";
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/system/Box';
 
-import CustomCheckBox from "../../components/CustomCheckbox";
-import AuthLayout from "./AuthLayout";
+import { useNavigate } from 'react-router-dom';
 
-import { useNavigate } from "react-router-dom";
-import { validateEmail } from "../../resources/helpers/authHelper";
+import { Link } from 'react-router-dom';
 
-const useStyles = makeStyles({
-  inputContainer: {
-    backgroundColor: "rgb(51 51 51)",
-    width: "100%",
-    height: "55px",
-    marginBottom: "30px",
-  },
-  inputField: { width: "100%", height: "55px" },
-  forgotSection: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  rememberMe: { display: "flex", flexDirection: "row", alignItems: "center" },
-  linkButton: {
-    "&.MuiButtonBase-root:hover": {
-      bgcolor: "transparent",
-    },
-  },
-  signInButton: {
-    margin: "25px 0px !important",
-    textTransform: "none !important",
-    width: "40%",
-  },
-  signUpContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: "25px",
-  },
-});
+import { loginUser, validateEmail } from '../../resources/helpers/authHelper';
 
-const Login = () => {
-  const [input, setInput] = React.useState({ email: "", password: "" });
-  const [error, setError] = React.useState({ email: "", password: "" });
+import BaseSnackbar from '../../components/BaseSnackbar';
+
+export default function Login() {
+  const [values, setValues] = React.useState({
+    email: '',
+    password: '',
+    showPassword: false
+  });
+  const [error, setError] = React.useState({ email: '', password: '' });
+
+  const [backendError, setBackendError] = React.useState('');
+
+  const handleChange = (event, prop) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const handleClickShowPassword = () => {
+    setValues({
+      ...values,
+      showPassword: !values.showPassword
+    });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   const navigate = useNavigate();
 
-  const handleChange = (event, key) => {
-    setInput({ ...input, [key]: event.target.value });
-  };
+  const loginUserHandler = async () => {
+    let emailError =
+      values.email === '' || !validateEmail(values.email)
+        ? 'Please provide a valid email'
+        : '';
 
-  const handleSignIn = () => {
-    const emailError =
-      input.email === "" || !validateEmail(input.email)
-        ? "Please provide an valid email"
-        : "";
+    let passwordError =
+      values.password === '' ? 'Please provide a password' : '';
 
-    const passwordError =
-      input.password.length < 8
-        ? "Your password must be at at least 8 characters long "
-        : "";
-
-    if (emailError === "" && passwordError === "") {
-      navigate("/home");
+    if (emailError === '' && passwordError === '') {
+      setBackendError('');
+      try {
+        const response = await loginUser(values);
+        if (response.statusCode) {
+          setBackendError(response.message);
+          setError({ email: '', password: '' });
+        } else {
+          navigate('/home');
+        }
+      } catch (err) {
+        console.log(err);
+      }
     } else setError({ email: emailError, password: passwordError });
   };
 
-  const classes = useStyles();
   return (
-    <AuthLayout>
-      <Typography color="#fff" mb="25px" variant="h4" fontFamily="sans-serif">
-        Sign in
-      </Typography>
-      <Paper className={classes.inputContainer}>
-        <TextField
-          error={error.email === "" ? false : true}
-          required
-          label="Email"
-          defaultValue="email@someone.com"
-          helperText={error.email}
-          onChange={(ev) => handleChange(ev, "email")}
-          value={input.email}
-          className={classes.inputField}
-          variant="filled"
-          InputLabelProps={{
-            sx: {
-              color: "#8c8c8c",
-            },
-          }}
-        />
-      </Paper>
-      <Paper className={classes.inputContainer}>
-        <TextField
-          error={error.password === "" ? false : true}
-          label="Password *"
-          type="password"
-          autoComplete="current-password"
-          className={classes.inputField}
-          helperText={error.password}
-          onChange={(ev) => handleChange(ev, "password")}
-          value={input.password}
-          variant="filled"
-          InputLabelProps={{
-            sx: {
-              color: "#8c8c8c",
-            },
-          }}
-        />
-      </Paper>
-      <Box className={classes.forgotSection}>
-        <Box className={classes.rememberMe}>
-          <CustomCheckBox />
-          <Typography color="#b3b3b3">Remember me</Typography>
-        </Box>
-        <Button
-          variant="text"
-          disableFocusRipple
-          disableElevation
-          disableRipple
-          className={classes.linkButton}
-          onClick={() => navigate("/reset-pass")}
-        >
-          <Typography sx={{ textTransform: "none", color: "#b3b3b3" }}>
-            Forgot password?
-          </Typography>
-        </Button>
-      </Box>
-      <Button
-        variant="contained"
-        className={classes.signInButton}
-        onClick={handleSignIn}
+    <>
+      <Container
+        maxWidth="xs"
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column'
+        }}
       >
-        Sign in
-      </Button>
-      <Box className={classes.signUpContainer}>
-        <Typography color="#b3b3b3">New on this app?</Typography>
-        <Button
-          variant="text"
-          disableFocusRipple
-          disableElevation
-          disableRipple
-          className={classes.linkButton}
-          onClick={() => navigate("/register")}
+        <Typography
+          color="#696969"
+          mb="10px"
+          mt="50px"
+          variant="h4"
+          fontFamily="sans-serif"
         >
-          <Typography sx={{ textTransform: "none", color: "#fff" }}>
-            Sign up now.
-          </Typography>
-        </Button>
-      </Box>
-    </AuthLayout>
-  );
-};
+          Hello Again !
+        </Typography>
+        <Typography
+          color="#696969"
+          mb="50px"
+          variant="h5"
+          fontFamily="sans-serif"
+          sx={{
+            textAlign: 'center'
+          }}
+        >
+          Welcome back you've been missed !
+        </Typography>
 
-export default Login;
+        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+          <TextField
+            id="outlined-email"
+            type="email"
+            value={values.email}
+            onChange={(event) => {
+              handleChange(event, 'email');
+            }}
+            error={error.email === '' ? false : true}
+            label="Email"
+          />
+          <Typography
+            sx={{
+              color: 'red'
+            }}
+          >
+            {error.email}
+          </Typography>
+        </FormControl>
+
+        <FormControl sx={{ mt: 1, width: '100%' }} variant="outlined">
+          <TextField
+            id="outlined-adornment-password"
+            type={values.showPassword ? 'text' : 'password'}
+            value={values.password}
+            onChange={(event) => handleChange(event, 'password')}
+            error={error.password === '' ? false : true}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+          <Typography
+            sx={{
+              color: 'red'
+            }}
+          >
+            {error.password}
+          </Typography>
+        </FormControl>
+
+        <Button
+          variant="contained"
+          color="secondary"
+          size="large"
+          sx={{ mt: 3, display: 'flex', width: '100%' }}
+          onClick={loginUserHandler}
+        >
+          sign in
+        </Button>
+        <Box sx={{ width: '100%' }}>
+          <Divider variant="fullWidth" sx={{ mt: 3, mb: 3 }} />
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <Typography
+            color="#696969"
+            fontFamily="sans-serif"
+            sx={{
+              textAlign: 'center'
+            }}
+          >
+            New here ?
+          </Typography>
+          <Button
+            variant="outlined"
+            component={Link}
+            to="/signup"
+            sx={{ ml: 2 }}
+            color="secondary"
+          >
+            SignUp
+          </Button>
+        </Box>
+      </Container>
+
+      {!!backendError && <BaseSnackbar text={backendError} />}
+    </>
+  );
+}

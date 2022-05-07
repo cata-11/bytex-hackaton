@@ -1,8 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../util/database');
 
-const Event = require('./event');
-
 const User = db.define(
     "users", {
         id: {

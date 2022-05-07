@@ -1,23 +1,46 @@
-import axios from "axios";
+const BASE_URL = 'http://localhost:5000';
 
-const BASE_URL = ""; //TODO: Add url
-
-//Here we'll store our helper functions for auth pages
 export const validateEmail = (email) => {
   const re = /\S+@\S+\.\S+/;
   return re.test(email);
 };
 
-export const registerUser = async (userInfo) => {
-  const res = axios.post(`${BASE_URL}api/v1/users`, {
-    email: userInfo.email,
-    firstname: userInfo.firstName,
-    lastname: userInfo.lastName,
-    password: userInfo.password,
-    username: "newUserTest",
-  });
+export const signupUser = async (userInfo) => {
+  console.log(userInfo);
 
-  if (res.status === 200) {
-    return true;
-  } else throw new Error("Something went wrong, please try again!");
+  return fetch(`${BASE_URL}/signup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: userInfo.email,
+      password: userInfo.password,
+      username: userInfo.username,
+      firstname: userInfo.firstName,
+      lastname: userInfo.lastName
+    })
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((res) => {
+      // console.log(res);
+      return res;
+    });
+};
+
+export const loginUser = async (userInfo) => {
+  return fetch(`${BASE_URL}/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: userInfo.email,
+      password: userInfo.password
+    })
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((res) => {
+      return res;
+    });
 };

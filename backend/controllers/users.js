@@ -1,5 +1,6 @@
 const db = require('../util/database');
 const User = require('../models/user');
+const Sequelize = require('sequelize');
 
 const bcrypt = require('bcrypt');
 const jsonToken = require('jsonwebtoken');
@@ -11,13 +12,20 @@ exports.signup = (req, res, next) => {
     const firstname = req.body.firstname;
     const lastname = req.body.lastname;
     const username = req.body.username;
-    const latitude = req.body.latitude;
-    const longitude = req.body.longitude;
+    const latitude = 0.0;
+    const longitude = 0.0;
 
-    User.findOne({ where: { email: email } })
+    User.findOne({
+            where: Sequelize.or({
+                email: email
+            }, {
+                username: username
+            })
+        })
         .then((result) => {
             if (result) {
-                const err = new Error('User with this email already exists !');
+                let type = result.email === email ? 'email' : 'username';
+                const err = new Error(`User with this ${type} already exists !`);
                 err.statusCode = 409;
                 throw err;
             }
@@ -35,12 +43,12 @@ exports.signup = (req, res, next) => {
             });
             return user;
         })
-        .then((rr) => {
+        .then(() => {
             res.status(201).json({
-                msg: `Account created successfully!`
+                msg: `Account created succesfully!`
             });
         })
-        .catch((err) => next(err));
+        .catch((err) => next(err));;
 };
 
 exports.login = (req, res, next) => {
@@ -49,7 +57,7 @@ exports.login = (req, res, next) => {
 
     let user;
 
-    User.findOne({ email: email })
+    User.findOne({ where: { email: email } })
         .then((result) => {
             if (!result) {
                 const err = new Error('User with such email not found.');
@@ -72,16 +80,14 @@ exports.login = (req, res, next) => {
                 }
             );
 
-            res
-                .status(200)
-                .json({
-                    token: token,
-                    username: user.username,
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                    email: user.email,
-                    id: user.id
-                });
+            res.status(200).json({
+                token: token,
+                username: user.username,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                id: user.id
+            });
         })
         .catch((err) => next(err));
 };
@@ -95,14 +101,14 @@ exports.addPoints = (req, res, next) => {
         .then((result) => {
             points = points + parseInt(result.score);
             User.update({ score: points }, { where: { id: id } })
-                .then(result2 => {
+                .then((result2) => {
                     res.status(201).json({
-                        msg: `Added ${pointsToAdd} points to user.`,
+                        msg: `Added ${pointsToAdd} points to user.`
                     });
                 })
-                .catch(err => next(err));
+                .catch((err) => next(err));
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
 };
 
 exports.findByUsername = (req, res, next) => {
