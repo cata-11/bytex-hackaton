@@ -27,12 +27,6 @@ const User = db.define(
         is_active: {
             type: DataTypes.BOOLEAN,
         },
-        type: {
-            type: DataTypes.INTEGER,
-        },
-        settings: {
-            type: DataTypes.TEXT,
-        },
     }, {
         freezeTableName: true,
         timestamps: false,
