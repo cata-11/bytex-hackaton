@@ -1,24 +1,42 @@
+import { DataTypes, Sequelize } from "sequelize";
+import db from "../util/database";
 
-// const { Sequelize, DataTypes } = require('sequelize');
-// const sequelize = new Sequelize('sqlite::memory:');
 
-// const User = sequelize.define(
-//   'User',
-//   {
-//     // Model attributes are defined here
-//     firstName: {
-//       type: DataTypes.STRING,
-//       allowNull: false
-//     },
-//     lastName: {
-//       type: DataTypes.STRING
-//       // allowNull defaults to true
-//     }
-//   },
-//   {
-//     // Other model options go here
-//   }
-// );
+const User = db.define(
+    "user", {
+        id: {
+            type: DataTypes.BIGINT,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        email: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+        },
+        first_name: {
+            type: DataTypes.TEXT,
+        },
+        last_name: {
+            type: DataTypes.TEXT,
+        },
+        password: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+        },
+        is_active: {
+            type: DataTypes.BOOLEAN,
+        },
+        type: {
+            type: DataTypes.INTEGER,
+        },
+        settings: {
+            type: DataTypes.TEXT,
+        },
+    }, {
+        freezeTableName: true,
+        timestamps: false,
+    }
+);
 
-// // `sequelize.define` also returns the model
-// console.log(User === sequelize.models.User); // true
+module.exports = db.model(User);
