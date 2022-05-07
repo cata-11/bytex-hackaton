@@ -4,7 +4,7 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jsonToken = require('jsonwebtoken');
 
-exports.signup = async(req, res, next) => {
+exports.signup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const firstname = req.body.firstname;
@@ -32,7 +32,7 @@ exports.signup = async(req, res, next) => {
         })
         .then((rr) => {
             res.status(201).json({
-                msg: `Account created succesfully!`
+                msg: `Account created successfully!`
             });
         })
         .catch((err) => next(err));
@@ -80,3 +80,34 @@ exports.login = (req, res, next) => {
         })
         .catch((err) => next(err));
 };
+
+exports.addPoints = (req, res, next) => {
+    const id = req.body.id;
+    let points = parseInt(req.body.points);
+    const pointsToAdd = points;
+
+    User.findOne({ where: { id: id } })
+        .then((result) => {
+            points = points + parseInt(result.score);
+            User.update({ score: points }, { where: { id: id } })
+                .then(result2 => {
+                    res.status(201).json({
+                        msg: `Added ${pointsToAdd} points to user.`,
+                    });
+                })
+                .catch(err => next(err));
+        })
+        .catch(err => next(err));
+};
+
+exports.findByUsername = (req, res, next) => {
+    const username = req.params.username;
+
+    User.findOne({ where: { username: username } })
+        .then((result) => {
+            res.status(200).json({
+                user: result,
+            })
+        })
+        .catch(err => next(err));
+}

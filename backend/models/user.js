@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
 const db = require('../util/database');
 
+const Event = require('./event');
+
 const User = db.define(
     "users", {
         id: {
@@ -29,6 +31,10 @@ const User = db.define(
             type: Sequelize.STRING,
             allowNull: false,
         },
+        score: {
+            type: Sequelize.BIGINT,
+            defaultValue: 0,
+        }
     }, {
         timestamps: false,
     }
