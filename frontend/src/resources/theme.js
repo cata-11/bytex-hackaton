@@ -1,9 +1,14 @@
-export const themeOptions = {
+export const getThemeOptions = (mode) => ({
   palette: {
-    mode: "dark",
-    //TODO: Define palette colors
-    // primary: {
-    //   main: "#656974",
-    // },
+    mode,
+    ...(mode === "light"
+      ? {
+          // palette values for light mode
+          background: "#f2f2f2",
+        }
+      : {
+          // palette values for dark mode
+          background: "#1c2128",
+        }),
   },
-};
+});
