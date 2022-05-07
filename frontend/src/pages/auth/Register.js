@@ -1,230 +1,343 @@
-import React from "react";
+import * as React from 'react';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormControl from '@mui/material/FormControl';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import { makeStyles } from "@mui/styles";
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/system/Box';
 
-import AuthLayout from "./AuthLayout";
-import { useNavigate } from "react-router-dom";
-import {
-  registerUser,
-  validateEmail,
-} from "../../resources/helpers/authHelper";
+import { useNavigate } from 'react-router-dom';
 
-const useStyles = makeStyles({
-  inputContainer: {
-    backgroundColor: "rgb(51 51 51)",
-    width: "100%",
-    height: "55px",
-    marginBottom: "30px",
-  },
-  inputField: { width: "100%", height: "55px" },
-  signUpButton: {
-    margin: "15px 0px !important",
-    textTransform: "none !important",
-    width: "40%",
-  },
-  signInContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: "25px",
-  },
-  linkButton: {
-    "&.MuiButtonBase-root:hover": {
-      bgcolor: "transparent",
-    },
-  },
-});
+import { Link } from 'react-router-dom';
 
-const Register = () => {
-  const [input, setInput] = React.useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+import { signupUser, validateEmail } from '../../resources/helpers/authHelper';
+
+import BaseSnackbar from '../../components/BaseSnackbar';
+
+export default function Register() {
+  const [values, setValues] = React.useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    firstName: '',
+    lastName: '',
+    username: '',
+    showPassword: false,
+    showConfirmPassword: false
   });
   const [error, setError] = React.useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    email: '',
+    password: '',
+    confirmPassword: '',
+    firstName: '',
+    username: '',
+    lastName: ''
   });
-  const navigate = useNavigate();
 
-  const handleChangeInput = (event, key) => {
-    setInput({ ...input, [key]: event.target.value });
+  const [backendError, setBackendError] = React.useState('');
+
+  const handleChange = (event, prop) => {
+    setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleSignUp = async () => {
-    const firstNameError =
-      input.firstName === "" ? "Please provide your first name" : "";
+  const handleClickShowPassword = () => {
+    setValues({
+      ...values,
+      showPassword: !values.showPassword
+    });
+  };
 
-    const lastNameError =
-      input.lastName === "" ? "Please provide your last name" : "";
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
-    const emailError =
-      input.email === "" || !validateEmail(input.email)
-        ? "Please provide an valid email"
-        : "";
+  const navigate = useNavigate();
 
-    const passwordError =
-      input.password.length < 8
-        ? "Your password must be at at least 8 characters long "
-        : "";
+  const loginUserHandler = async () => {
+    let emailError =
+      values.email === '' || !validateEmail(values.email)
+        ? 'Please provide a valid email'
+        : '';
 
-    const confirmPasswordError =
-      input.confirmPassword !== input.password
-        ? "The password provided does not match"
-        : "";
+    let passwordError =
+      values.password === '' ? 'Please provide a password' : '';
+
+    let firstNameError =
+      values.firstName === '' ? 'Please enter your name' : '';
+
+    let lastNameError =
+      values.lastName === '' ? 'Please enter your surname' : '';
+
+    let usernameError = values.username === '' ? 'Please enter a username' : '';
+
+    let confirmPasswordError =
+      values.password !== values.confirmPassword ||
+      values.confirmPassword === ''
+        ? "Passwords don't match"
+        : '';
 
     if (
-      firstNameError === "" &&
-      lastNameError === "" &&
-      emailError === "" &&
-      passwordError === "" &&
-      confirmPasswordError === ""
+      emailError === '' &&
+      passwordError === '' &&
+      firstNameError === '' &&
+      lastNameError === '' &&
+      usernameError === '' &&
+      confirmPasswordError === ''
     ) {
+      setBackendError('');
       try {
-        const response = await registerUser(input);
-        if (response) navigate("/login");
-      } catch (e) {
-        console.log(e); //TODO: Show the user the error in some way
+        const response = await signupUser(values);
+        console.log(response);
+        if (response.statusCode) {
+          setBackendError(response.message);
+          setError({
+            email: '',
+            password: '',
+            firstName: '',
+            lastName: '',
+            username: '',
+            confirmPassword: ''
+          });
+        } else {
+          navigate('/login');
+        }
+      } catch (err) {
+        console.log(err);
       }
     } else
       setError({
-        firstName: firstNameError,
-        lastName: lastNameError,
         email: emailError,
         password: passwordError,
+        firstName: firstNameError,
+        lastName: lastNameError,
         confirmPassword: confirmPasswordError,
+        username: usernameError
       });
   };
 
-  const classes = useStyles();
   return (
-    <AuthLayout>
-      <Typography color="#fff" variant="h4" fontFamily="sans-serif" mb="25px">
-        Sign up
-      </Typography>
-
-      <Paper className={classes.inputContainer}>
-        <TextField
-          error={error.firstName === "" ? false : true}
-          label="First Name"
-          helperText={error.firstName}
-          onChange={(event) => handleChangeInput(event, "firstName")}
-          value={input.firstName}
-          className={classes.inputField}
-          variant="filled"
-          InputLabelProps={{
-            sx: {
-              color: "#8c8c8c",
-            },
-          }}
-        />
-      </Paper>
-
-      <Paper className={classes.inputContainer}>
-        <TextField
-          error={error.lastName === "" ? false : true}
-          label="Last Name"
-          onChange={(event) => handleChangeInput(event, "lastName")}
-          value={input.lastName}
-          helperText={error.lastName}
-          className={classes.inputField}
-          variant="filled"
-          InputLabelProps={{
-            sx: {
-              color: "#8c8c8c",
-            },
-          }}
-        />
-      </Paper>
-
-      <Paper className={classes.inputContainer}>
-        <TextField
-          error={error.email === "" ? false : true}
-          label="Email address"
-          helperText={error.email}
-          onChange={(event) => handleChangeInput(event, "email")}
-          value={input.email}
-          className={classes.inputField}
-          variant="filled"
-          InputLabelProps={{
-            sx: {
-              color: "#8c8c8c",
-            },
-          }}
-        />
-      </Paper>
-
-      <Paper className={classes.inputContainer}>
-        <TextField
-          error={error.password === "" ? false : true}
-          label="Password"
-          type="password"
-          onChange={(event) => handleChangeInput(event, "password")}
-          value={input.password}
-          helperText={error.password}
-          className={classes.inputField}
-          variant="filled"
-          InputLabelProps={{
-            sx: {
-              color: "#8c8c8c",
-            },
-          }}
-        />
-      </Paper>
-
-      <Paper className={classes.inputContainer}>
-        <TextField
-          error={error.confirmPassword === "" ? false : true}
-          label="Confirm password"
-          type="password"
-          onChange={(event) => handleChangeInput(event, "confirmPassword")}
-          helperText={error.confirmPassword}
-          value={input.confirmPassword}
-          className={classes.inputField}
-          variant="filled"
-          InputLabelProps={{
-            sx: {
-              color: "#8c8c8c",
-            },
-          }}
-        />
-      </Paper>
-
-      <Button
-        variant="contained"
-        className={classes.signUpButton}
-        onClick={handleSignUp}
+    <>
+      <Container
+        maxWidth="xs"
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column'
+        }}
       >
-        Sign up
-      </Button>
-
-      <Box className={classes.signInContainer}>
-        <Typography color="#b3b3b3">Already a user?</Typography>
-        <Button
-          variant="text"
-          disableFocusRipple
-          disableElevation
-          disableRipple
-          className={classes.linkButton}
-          onClick={() => navigate("/login")}
+        <Typography
+          color="#696969"
+          mb="10px"
+          mt="50px"
+          variant="h4"
+          fontFamily="sans-serif"
         >
-          <Typography sx={{ textTransform: "none", color: "#fff" }}>
-            Sign in now.
+          Hello !
+        </Typography>
+        <Typography
+          color="#696969"
+          mb="50px"
+          variant="h5"
+          fontFamily="sans-serif"
+          sx={{
+            textAlign: 'center'
+          }}
+        >
+          Create a new account
+        </Typography>
+        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+          <TextField
+            id="outlined-email"
+            type="email"
+            value={values.email}
+            onChange={(event) => {
+              handleChange(event, 'email');
+            }}
+            error={error.email === '' ? false : true}
+            label="Email"
+          />
+          <Typography
+            sx={{
+              color: 'red'
+            }}
+          >
+            {error.email}
           </Typography>
-        </Button>
-      </Box>
-    </AuthLayout>
-  );
-};
+        </FormControl>
 
-export default Register;
+        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+          <TextField
+            id="outlined-name"
+            type="text"
+            value={values.firstName}
+            onChange={(event) => {
+              handleChange(event, 'firstName');
+            }}
+            error={error.firstName === '' ? false : true}
+            label="First Name"
+          />
+          <Typography
+            sx={{
+              color: 'red'
+            }}
+          >
+            {error.firstName}
+          </Typography>
+        </FormControl>
+
+        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+          <TextField
+            id="outlined-surname"
+            type="text"
+            value={values.lastName}
+            onChange={(event) => {
+              handleChange(event, 'lastName');
+            }}
+            error={error.lastName === '' ? false : true}
+            label="Last Name"
+          />
+          <Typography
+            sx={{
+              color: 'red'
+            }}
+          >
+            {error.lastName}
+          </Typography>
+        </FormControl>
+
+        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+          <TextField
+            id="outlined-username"
+            type="text"
+            value={values.username}
+            onChange={(event) => {
+              handleChange(event, 'username');
+            }}
+            error={error.username === '' ? false : true}
+            label="Username"
+          />
+          <Typography
+            sx={{
+              color: 'red'
+            }}
+          >
+            {error.username}
+          </Typography>
+        </FormControl>
+
+        <FormControl sx={{ mt: 1, width: '100%' }} variant="outlined">
+          <TextField
+            id="outlined-adornment-password"
+            type={values.showPassword ? 'text' : 'password'}
+            value={values.password}
+            onChange={(event) => handleChange(event, 'password')}
+            error={error.password === '' ? false : true}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+          <Typography
+            sx={{
+              color: 'red'
+            }}
+          >
+            {error.password}
+          </Typography>
+        </FormControl>
+
+        <FormControl sx={{ mt: 2, width: '100%' }} variant="outlined">
+          <TextField
+            id="outlined-adornment-confirm-password"
+            type={values.showConfirmPassword ? 'text' : 'password'}
+            value={values.confirmPassword}
+            onChange={(event) => handleChange(event, 'confirmPassword')}
+            error={error.confirmPassword === '' ? false : true}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showConfirmPassword ? (
+                    <VisibilityOff />
+                  ) : (
+                    <Visibility />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Confirm Password"
+          />
+          <Typography
+            sx={{
+              color: 'red'
+            }}
+          >
+            {error.confirmPassword}
+          </Typography>
+        </FormControl>
+
+        <Button
+          variant="contained"
+          color="secondary"
+          size="large"
+          sx={{ mt: 3, display: 'flex', width: '100%' }}
+          onClick={loginUserHandler}
+        >
+          sign in
+        </Button>
+        <Box sx={{ width: '100%' }}>
+          <Divider variant="fullWidth" sx={{ mt: 3, mb: 3 }} />
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <Typography
+            color="#696969"
+            fontFamily="sans-serif"
+            sx={{
+              textAlign: 'center'
+            }}
+          >
+            Already have an account ?
+          </Typography>
+          <Button
+            variant="outlined"
+            component={Link}
+            to="/login"
+            sx={{ ml: 2 }}
+            color="secondary"
+          >
+            LogIn
+          </Button>
+        </Box>
+      </Container>
+
+      {!!backendError && <BaseSnackbar text={backendError} />}
+    </>
+  );
+}
