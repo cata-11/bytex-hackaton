@@ -71,7 +71,12 @@ exports.login = (req, res, next) => {
 
       res
         .status(200)
-        .json({ token: token, nickname: user.nickname, email: user.email });
+        .json({
+          token: token,
+          nickname: user.username,
+          email: user.email,
+          id: user.id
+        });
     })
     .catch((err) => next(err));
 };
