@@ -4,7 +4,6 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
-// import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 
 const BoardListItem = ({ user }) => {
@@ -13,7 +12,7 @@ const BoardListItem = ({ user }) => {
       <ListItem
         alignItems="flex-start"
         sx={{
-          width: '315px',
+          width: '100%',
           borderRadius: '12px',
           backgroundColor: 'white',
           marginBottom: '.5rem'
@@ -28,7 +27,7 @@ const BoardListItem = ({ user }) => {
         </ListItemAvatar>
         <ListItemText
           sx={{ width: '100%' }}
-          primary={user.firstName + ' ' + user.lastName}
+          primary={user.firstname + ' ' + user.lastname}
           secondary={
             <Typography
               sx={{ display: 'inline' }}
