@@ -4,72 +4,37 @@ import Box from '@mui/material/Box';
 import { List } from '@mui/material';
 import PageLayout from './PageLayout';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import EventInviteItem from './EventInviteItem';
 import FriendReqItem from './FriendReqItem';
 
+const BASE_URL = 'http://localhost:5000';
+
 export default function Notifications() {
-  const [filter, setFilter] = useState(false);
+  const [filter, setFilter] = useState('events');
   const toggleFilter = (e) => {
-    let btn = e.target.innerText;
-    if (btn === 'INVITES') {
-      setFilter(false);
-    } else {
-      setFilter(true);
-    }
+    setFilter(e);
   };
 
-  const events = [
-    {
-      id: '1',
-      name: 'event 1',
-      inviter: 'inviter 1',
-      latitude: '10.00.00',
-      longitude: '10.11.11'
-    },
-    {
-      id: '2',
-      name: 'event 2',
-      inviter: 'inviter 2',
-      latitude: '10.00.00',
-      longitude: '10.11.11'
-    },
-    {
-      id: '3',
-      name: 'event 3',
-      inviter: 'inviter 3',
-      latitude: '10.00.00',
-      longitude: '10.11.11'
-    }
-  ];
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
 
-  const friends = [
-    {
-      id: '1',
-      username: 'username 1',
-      firstname: 'name',
-      lastname: 'surname',
-      score: '320'
-    },
-    {
-      id: '2',
-      username: 'username 2',
-      firstname: 'name',
-      lastname: 'surname',
-      score: '100'
-    },
-    {
-      id: '3',
-      username: 'username 3',
-      firstname: 'name',
-      lastname: 'surname',
-      score: '210'
-    }
-  ];
+    fetch(`${BASE_URL}/notif/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setLoadedFriends(res.users);
+        setLoadedEvents(res.events);
+      });
+  }, []);
 
-  const [loadedEvents, setLoadedEvents] = useState(events);
-  const [loadedFriends, setLoadedFriends] = useState(friends);
+  const [loadedEvents, setLoadedEvents] = useState([]);
+  const [loadedFriends, setLoadedFriends] = useState([]);
 
   const eventsInviteList = loadedEvents.map((e) => (
     <EventInviteItem key={e.id} event={e} />
@@ -84,15 +49,15 @@ export default function Notifications() {
       <Box sx={{ marginBottom: '1rem' }}>
         <Button
           color="secondary"
-          onClick={toggleFilter}
-          variant={filter === true ? 'outlined' : 'contained'}
+          onClick={() => toggleFilter('events')}
+          variant={filter === 'friends' ? 'outlined' : 'contained'}
         >
           Invites
         </Button>
         <Button
           color="secondary"
-          onClick={toggleFilter}
-          variant={filter === false ? 'outlined' : 'contained'}
+          onClick={() => toggleFilter('friends')}
+          variant={filter === 'events' ? 'outlined' : 'contained'}
           sx={{
             marginLeft: '.5rem'
           }}
@@ -100,8 +65,8 @@ export default function Notifications() {
           Friends
         </Button>
       </Box>
-      {filter === true && <List>{eventsInviteList}</List>}
-      {filter === false && <List>{friendsInviteList}</List>}
+      {filter === 'events' && <List>{eventsInviteList}</List>}
+      {filter === 'friends' && <List>{friendsInviteList}</List>}
     </PageLayout>
   );
 }
