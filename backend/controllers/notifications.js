@@ -3,6 +3,7 @@ const db = require('../util/database');
 
 const Notification = require('../models/notification');
 const User = require('../models/user');
+const Event = require('../models/event');
 const UserFriend = require('../models/user-friend');
 
 exports.createNotif = (req, res, next) => {
@@ -25,12 +26,44 @@ exports.createNotif = (req, res, next) => {
 
 exports.getNotifsOfUser = (req, res, next) => {
     const id_to = req.params.id_user;
+    const arr_users = [];
+    const arr_events = [];
 
     Notification.findAll({ where: { id_to: id_to, is_new: true } })
         .then(result => {
-            res.status(201).json({
-                notifications: result,
+            result.forEach((item, index) => {
+                console.log(item.dataValues)
+                const id_from = item.dataValues.id_from;
+                arr_users.push(
+                    User.findOne({ where: { id: id_from } })
+                );
             });
+
+            result.forEach((item, index) => {
+                if (item.dataValues.event_id == null) {
+                    arr_events.push(null);
+                } else {
+                    const event_id = item.dataValues.event_id;
+                    arr_events.push(
+                        Event.findOne({ where: { id: event_id } })
+                    );
+                }
+            })
+
+            Promise.all(arr_users)
+                .then((result2) => {
+                    Promise.all(arr_events)
+                        .then((result3) => {
+                            res.status(201).json({
+                                notifications: result,
+                                users: result2,
+                                events: result3,
+                            });
+                        })
+                        .catch((err) => next(err));
+                })
+                .catch((err) => next(err));
+
         })
         .catch((err) => next(err));
 }
