@@ -3,16 +3,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 const EventInviteItem = ({ event }) => {
   return (
     <ListItem
-      alignItems="flex-start"
       sx={{
         width: '100%',
         borderRadius: '12px',
         backgroundColor: 'white',
-        marginBottom: '.5rem'
+        marginBottom: '.5rem',
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
       <ListItemText
@@ -39,6 +41,10 @@ const EventInviteItem = ({ event }) => {
           </Typography>
         }
       />
+      <Box sx={{ alignSelf: 'end' }}>
+        <Button color="error">Decline</Button>
+        <Button color="secondary">Accept</Button>
+      </Box>
     </ListItem>
   );
 };
