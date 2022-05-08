@@ -1,15 +1,14 @@
-import * as React from 'react';
-import List from '@mui/material/List';
-import PageLayout from './PageLayout';
-import Button from '@mui/material/Button';
+import * as React from "react";
+import List from "@mui/material/List";
+import Button from "@mui/material/Button";
 
-import BoardListItem from './BoardListItem';
+import BoardListItem from "./BoardListItem";
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from "react";
 
-import UserContext from '../../resources/context/UserContext';
+import UserContext from "../../resources/context/UserContext";
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = "http://localhost:5000";
 
 export default function LeaderBoard() {
   const userCtx = useContext(UserContext);
@@ -25,7 +24,7 @@ export default function LeaderBoard() {
   const [filter, setFilter] = useState(false);
   const toggleFilter = (e) => {
     let btn = e.target.innerText;
-    if (btn === 'ALL') {
+    if (btn === "ALL") {
       setFilter(false);
     } else {
       setFilter(true);
@@ -35,10 +34,10 @@ export default function LeaderBoard() {
   useEffect(() => {
     if (!filter) {
       fetch(`${BASE_URL}/leaderboard`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       })
         .then((res) => res.json())
         .then((res) => {
@@ -48,10 +47,10 @@ export default function LeaderBoard() {
     } else {
       console.log(userId);
       fetch(`${BASE_URL}/leaderboard/${userId}`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       })
         .then((res) => res.json())
         .then((res) => {
@@ -66,25 +65,21 @@ export default function LeaderBoard() {
   ));
 
   return (
-    <PageLayout title="Leaderboard">
-      <Button
-        color="secondary"
-        onClick={toggleFilter}
-        variant={filter === true ? 'outlined' : 'contained'}
-      >
+    <>
+      <Button color="secondary" onClick={toggleFilter} variant="contained">
         All
       </Button>
       <Button
         color="secondary"
         onClick={toggleFilter}
-        variant={filter === false ? 'outlined' : 'contained'}
+        variant={filter === false ? "outlined" : "contained"}
         sx={{
-          marginLeft: '.5rem'
+          marginLeft: ".5rem",
         }}
       >
         Friends
       </Button>
       <List>{listItems}</List>
-    </PageLayout>
+    </>
   );
 }

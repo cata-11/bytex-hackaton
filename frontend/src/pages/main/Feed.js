@@ -1,5 +1,4 @@
 import React from 'react';
-import PageLayout from './PageLayout';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import EventCard from '../../components/EventCard';
@@ -8,7 +7,7 @@ import { useContext } from 'react';
 
 import UserContext from '../../resources/context/UserContext';
 
-const Feed = () => {
+const Feed = ({ title }) => {
   const userCtx = useContext(UserContext);
 
   const userIsAuth = userCtx.isAuthenticated();
@@ -19,13 +18,13 @@ const Feed = () => {
   }
 
   return (
-    <PageLayout title="Feed">
+    <>
       <Box
         sx={{
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-start'
+          justifyContent: 'flex-start',
         }}
       >
         <Typography variant="h4">Welcome back,</Typography>
@@ -36,7 +35,7 @@ const Feed = () => {
       <Box sx={{ marginTop: '35px', maxHeight: '70vh', overflowY: 'auto' }}>
         <EventCard />
       </Box>
-    </PageLayout>
+    </>
   );
 };
 

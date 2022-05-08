@@ -15,14 +15,18 @@ const BoardListItem = ({ user }) => {
           width: '100%',
           borderRadius: '12px',
           backgroundColor: 'white',
-          marginBottom: '.5rem'
+          marginBottom: '.5rem',
         }}
       >
         <ListItemAvatar>
           <Avatar
             sx={{ width: 60, height: 60, marginRight: '1rem' }}
             alt="avatar"
-            src="/static/images/avatar/1.jpg"
+            src={
+              'https://avatars.dicebear.com/api/personas/' +
+              user.username +
+              '.svg'
+            }
           />
         </ListItemAvatar>
         <ListItemText
@@ -40,7 +44,7 @@ const BoardListItem = ({ user }) => {
                   marginTop: '-2px',
                   marginLeft: '-1px',
                   marginBottom: '2px',
-                  opacity: '.5'
+                  opacity: '.5',
                 }}
               >
                 {'@' + user.username}

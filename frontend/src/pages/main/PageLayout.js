@@ -8,13 +8,17 @@ import Button from '@mui/material/Button';
 import NavBar from '../../components/NavBar';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
-const PageLayout = ({ children, title }) => {
-  const navigate = useNavigate();
+import Feed from './Feed';
+import Memories from './Memories';
+import LeaderBoard from './LeaderBoard';
+import Profile from './Profile';
 
-  const goToNotifications = () => {
-    navigate('/notifications');
+const PageLayout = ({ title }) => {
+  const [value, setValue] = React.useState('feed');
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
   return (
@@ -25,7 +29,7 @@ const PageLayout = ({ children, title }) => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: '100%'
+          height: '100%',
         }}
         maxWidth="xs"
       >
@@ -39,38 +43,42 @@ const PageLayout = ({ children, title }) => {
             margin: '15px 0',
             backgroundColor: '#ffffff',
             padding: '5px',
-            borderRadius: '9px'
+            borderRadius: '9px',
           }}
         >
           <Typography
             sx={{
-              fontSize: '1.5rem'
+              fontSize: '1.5rem',
             }}
           >
-            {title}
+            {value === 'scores'
+              ? 'LeaderBoard'
+              : value[0].toUpperCase() + value.slice(1)}
           </Typography>
-          {title !== 'Notifications' && (
-            <Button
-              onClick={goToNotifications}
-              variant="text"
-              sx={{
-                backgroundColor: '#fff',
-                padding: '6px',
-                width: '40px',
-                minWidth: 'initial',
-                '&:hover': {
-                  backgroundColor: '#f5f7f6'
-                }
-              }}
-            >
-              <Badge badgeContent={2} color="primary">
-                <NotificationsIcon sx={{ color: '#dbdce3' }} />
-              </Badge>
-            </Button>
-          )}
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: '#fff',
+              padding: '6px',
+              width: '50px',
+              minWidth: 'initial',
+              '&:hover': {
+                backgroundColor: '#f5f7f6',
+              },
+            }}
+          >
+            <Badge badgeContent={4} color="primary">
+              <NotificationsIcon sx={{ color: '#dbdce3' }} />
+            </Badge>
+          </Button>
         </Box>
-        <Box sx={{ height: '100%', width: '100%' }}>{children}</Box>
-        <NavBar />
+        <Box sx={{ height: '100%', width: '100%' }}>
+          {value === 'feed' && <Feed />}
+          {value === 'scores' && <LeaderBoard />}
+          {value === 'memories' && <Memories />}
+          {value === 'profile' && <Profile />}
+        </Box>
+        <NavBar value={value} handleChange={handleChange} />
       </Container>
     </Paper>
   );

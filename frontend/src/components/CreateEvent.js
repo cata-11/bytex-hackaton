@@ -25,7 +25,6 @@ const axios = require('axios');
 
 const useStyles = makeStyles({
   inputContainer: {
-    // backgroundColor: "rgb(51 51 51)",
     width: '100%',
     height: '55px',
     marginBottom: '30px',
@@ -44,7 +43,7 @@ const useStyles = makeStyles({
     },
   },
   signInButton: {
-    margin: '25px 0px !important',
+    margin: '10px 0px !important',
     textTransform: 'none !important',
     width: '40%',
   },
@@ -61,10 +60,10 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
   bgcolor: 'background.paper',
   boxShadow: 2,
-  p: 4,
+  p: 3,
+  width: '300px',
 };
 
 const ITEM_HEIGHT = 48;
@@ -111,6 +110,7 @@ const CreateEvent = ({ open, handleClose }) => {
     lng: 0,
   });
   const [friends, setFriends] = React.useState([]);
+  const [isOk, setIsOk] = React.useState(false);
 
   useEffect(() => {
     (async () => {
@@ -123,8 +123,26 @@ const CreateEvent = ({ open, handleClose }) => {
     })();
   }, []);
 
+  useEffect(() => {
+    checkInput();
+  }, [input, personName, value, coordinates]);
+
+  const checkInput = () => {
+    if (
+      !(
+        input.email === '' ||
+        personName.length === 0 ||
+        coordinates.lat === 0 ||
+        coordinates.lng === 0
+      )
+    ) {
+      setIsOk(true);
+    } else {
+      setIsOk(false);
+    }
+  };
+
   const onCoordinatesChange = (coordinates) => {
-    console.log(coordinates);
     setCoordinates(coordinates);
   };
 
@@ -299,6 +317,7 @@ const CreateEvent = ({ open, handleClose }) => {
             variant="contained"
             className={classes.signInButton}
             onClick={handleSignIn}
+            disabled={!isOk}
           >
             Done
           </Button>

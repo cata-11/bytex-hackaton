@@ -9,58 +9,53 @@ import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import PersonIcon from "@mui/icons-material/Person";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
-import { useNavigate, useLocation } from "react-router-dom";
 
 import CreateEvent from "./CreateEvent";
 
-const NavBar = () => {
-  const location = useLocation();
-  const [value, setValue] = React.useState(location.pathname);
+const NavBar = ({ value, handleChange }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const navigate = useNavigate();
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    navigate(`${newValue}`);
-  };
-
-  //TODO: Fix rerendering while changing routes
   return (
     <>
       <BottomNavigation
-        sx={{ width: "100%", borderRadius: "15px", marginBottom: "10px" }}
+        sx={{
+          width: "350px",
+          height: "50px",
+          borderRadius: "15px",
+          marginBottom: "10px",
+          position: "fixed",
+          top: "95%",
+          left: "50%",
+          marginTop: "-25px",
+          marginLeft: "-175px",
+        }}
         value={value}
         onChange={handleChange}
       >
         <BottomNavigationAction
           label="Feed"
-          value="/feed"
+          value="feed"
           icon={<DynamicFeedIcon />}
-          sx={{ padding: "5px" }}
         />
         <BottomNavigationAction
           label="Scores"
-          value="/scores"
+          value="scores"
           icon={<LeaderboardIcon />}
-          sx={{ padding: "5px" }}
         />
         <IconButton onClick={handleOpen}>
-          <AddLocationAltIcon />
+          <AddLocationAltIcon sx={{ fontSize: "40px", color: "#ff8552" }} />
         </IconButton>
         <BottomNavigationAction
           label="Memories"
-          value="/memories"
+          value="memories"
           icon={<InsertPhotoIcon />}
-          sx={{ padding: "5px" }}
         />
         <BottomNavigationAction
           label="Profile"
-          value="/profile"
+          value="profile"
           icon={<PersonIcon />}
-          sx={{ padding: "5px" }}
         />
       </BottomNavigation>
       <CreateEvent handleClose={handleClose} open={open} />
