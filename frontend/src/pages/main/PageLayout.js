@@ -30,7 +30,7 @@ const PageLayout = ({ title }) => {
     setNotification(true);
   };
 
-  console.log(notification)
+  console.log(notification);
   return (
     <Paper sx={{ width: '100vw', height: '100vh', backgroundColor: '#f4f6fa' }}>
       <Container
@@ -39,7 +39,7 @@ const PageLayout = ({ title }) => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: '100%'
+          height: '100%',
         }}
         maxWidth="xs"
       >
@@ -53,18 +53,19 @@ const PageLayout = ({ title }) => {
             margin: '15px 0',
             backgroundColor: '#ffffff',
             padding: '5px',
-            borderRadius: '9px'
+            borderRadius: '9px',
           }}
         >
-          {/* <Typography
+          <Typography
             sx={{
-              fontSize: '1.5rem'
+              fontSize: '1.5rem',
             }}
           >
-            {value === 'scores'
-              ? 'LeaderBoard'
-              : value[0].toUpperCase() + value.slice(1)}
-          </Typography> */}
+            {value === 'scores' && 'Leaderboard'}
+            {value === 'feed' && 'Feed'}
+            {value === 'memories' && 'Memories'}
+            {value === 'profile' && 'Profile'}
+          </Typography>
           <Button
             onClick={goToNotifications}
             variant="contained"
@@ -74,8 +75,8 @@ const PageLayout = ({ title }) => {
               width: '50px',
               minWidth: 'initial',
               '&:hover': {
-                backgroundColor: '#f5f7f6'
-              }
+                backgroundColor: '#f5f7f6',
+              },
             }}
           >
             <Badge badgeContent={4} color="primary">
@@ -88,7 +89,7 @@ const PageLayout = ({ title }) => {
           {value === 'scores' && <LeaderBoard />}
           {value === 'memories' && <Memories />}
           {value === 'profile' && <Profile />}
-          {notification && <Notifications/>}
+          {notification && <Notifications />}
         </Box>
         <NavBar value={value} handleChange={handleChange} />
       </Container>
