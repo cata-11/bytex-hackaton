@@ -13,6 +13,7 @@ import Memories from './pages/main/Memories';
 import LeaderBoard from './pages/main/LeaderBoard';
 import Profile from './pages/main/Profile';
 import NotFound from './pages/main/NotFound';
+import Notifications from './pages/main/Notifications';
 
 export const ColorModeContext = React.createContext({
   toggleColorMode: () => {}
@@ -43,7 +44,7 @@ const App = () => {
             <Route path="scores" element={<LeaderBoard />} />
             <Route path="memories" element={<Memories />} />
             <Route path="profile" element={<Profile />} />
-
+            <Route path="notifications" element={<Notifications />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Register />} />
             <Route path="reset-pass" element={<ResetPassword />} />
