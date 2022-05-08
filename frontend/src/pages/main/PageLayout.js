@@ -1,25 +1,26 @@
-import React from "react";
+import React from 'react';
 
-import Container from "@mui/material/Container";
-import Paper from "@mui/material/Paper";
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
 
-import NavBar from "../../components/NavBar";
-import Box from "@mui/material/Box";
+import NavBar from '../../components/NavBar';
+import Box from '@mui/material/Box';
 
 const PageLayout = ({ children }) => {
   return (
-    <Paper sx={{ width: "100vw", height: "100vh" }}>
+    <Paper sx={{ width: '100vw', height: '100vh' }}>
       <Container
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          height: "100%",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          height: '100%',
+          backgroundColor: '#F5F5F5'
         }}
         maxWidth="xs"
       >
-        <Box sx={{ height: "100%" }}>{children}</Box>
+        <Box sx={{ height: '100%' }}>{children}</Box>
         <NavBar />
       </Container>
     </Paper>
