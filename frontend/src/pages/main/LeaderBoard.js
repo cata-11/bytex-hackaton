@@ -67,13 +67,17 @@ export default function LeaderBoard() {
 
   return (
     <PageLayout title="Leaderboard">
-      <Button color="secondary" onClick={toggleFilter} variant="contained">
+      <Button
+        color="secondary"
+        onClick={toggleFilter}
+        variant={filter === true ? 'outlined' : 'contained'}
+      >
         All
       </Button>
       <Button
         color="secondary"
         onClick={toggleFilter}
-        variant="contained"
+        variant={filter === false ? 'outlined' : 'contained'}
         sx={{
           marginLeft: '.5rem'
         }}
