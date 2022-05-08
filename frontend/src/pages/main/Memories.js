@@ -9,7 +9,7 @@ const Memories = () => {
     <PageLayout title="Memories">
       <ImageList
         // Reemove scrollbar
-        sx={{ height: '85vh' }}
+        sx={{ height: '82vh' }}
         cols={3}
         // rowHeight={164}
         variant="quilted"
