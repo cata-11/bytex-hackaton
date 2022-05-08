@@ -14,7 +14,8 @@ exports.addUserToEvent = (req, res, next) => {
         })
         .then((result) => {
             res.status(201).json({
-                msg: 'Added user to the event!'
+                msg: 'Added user to the event!',
+                event: result,
             });
         })
         .catch((err) => next(err));
