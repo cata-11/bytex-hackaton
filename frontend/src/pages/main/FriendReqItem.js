@@ -3,6 +3,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 const FriendReqItem = ({ user }) => {
   return (
@@ -12,7 +13,9 @@ const FriendReqItem = ({ user }) => {
         width: '100%',
         borderRadius: '12px',
         backgroundColor: 'white',
-        marginBottom: '.5rem'
+        marginBottom: '.5rem',
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
       <ListItemText
@@ -37,6 +40,10 @@ const FriendReqItem = ({ user }) => {
           </Typography>
         }
       />
+      <Box sx={{ alignSelf: 'end' }}>
+        <Button color="error">Decline</Button>
+        <Button color="secondary">Accept</Button>
+      </Box>
     </ListItem>
   );
 };
