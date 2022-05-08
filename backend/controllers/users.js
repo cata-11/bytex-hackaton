@@ -128,8 +128,6 @@ exports.getLeaderboard = (req, res, next) => {
             order: [
                 ["score", "DESC"]
             ],
-            limit: 10,
-            offset: 0,
         })
         .then(result => {
             res.status(200).json({
