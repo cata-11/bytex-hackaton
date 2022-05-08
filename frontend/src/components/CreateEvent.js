@@ -1,70 +1,69 @@
-import React, { useEffect } from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Modal from '@mui/material/Modal';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import React, { useEffect } from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import Modal from "@mui/material/Modal";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
-import { useTheme } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
+import { useTheme } from "@mui/material/styles";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
 
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
-import { makeStyles } from '@mui/styles';
-import FriendChip from './FriendChip';
+import { makeStyles } from "@mui/styles";
+import FriendChip from "./FriendChip";
 
-import Map from './Map';
-const axios = require('axios');
+import Map from "./Map";
+const axios = require("axios");
 
 const useStyles = makeStyles({
   inputContainer: {
-    // backgroundColor: "rgb(51 51 51)",
-    width: '100%',
-    height: '55px',
-    marginBottom: '30px',
+    width: "100%",
+    height: "55px",
+    marginBottom: "30px",
   },
-  inputField: { width: '100%', height: '55px' },
+  inputField: { width: "100%", height: "55px" },
   forgotSection: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
-  rememberMe: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
+  rememberMe: { display: "flex", flexDirection: "row", alignItems: "center" },
   linkButton: {
-    '&.MuiButtonBase-root:hover': {
-      bgcolor: 'transparent',
+    "&.MuiButtonBase-root:hover": {
+      bgcolor: "transparent",
     },
   },
   signInButton: {
-    margin: '25px 0px !important',
-    textTransform: 'none !important',
-    width: '40%',
+    margin: "10px 0px !important",
+    textTransform: "none !important",
+    width: "40%",
   },
   signUpContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: '25px',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: "25px",
   },
 });
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
   boxShadow: 2,
-  p: 4,
+  p: 3,
+  width: "300px",
 };
 
 const ITEM_HEIGHT = 48;
@@ -79,16 +78,16 @@ const MenuProps = {
 };
 
 const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
+  "Oliver Hansen",
+  "Van Henry",
+  "April Tucker",
+  "Ralph Hubbard",
+  "Omar Alexander",
+  "Carlos Abbott",
+  "Miriam Wagner",
+  "Bradley Wilkerson",
+  "Virginia Andrews",
+  "Kelly Snyder",
 ];
 
 function getStyles(name, personName, theme) {
@@ -101,8 +100,8 @@ function getStyles(name, personName, theme) {
 }
 
 const CreateEvent = ({ open, handleClose }) => {
-  const [input, setInput] = React.useState({ email: '', password: '' });
-  const [error, setError] = React.useState({ email: '', password: '' });
+  const [input, setInput] = React.useState({ email: "", password: "" });
+  const [error, setError] = React.useState({ email: "", password: "" });
   const theme = useTheme();
   const [personName, setPersonName] = React.useState([]);
   const [value, setValue] = React.useState(new Date());
@@ -115,7 +114,7 @@ const CreateEvent = ({ open, handleClose }) => {
   useEffect(() => {
     (async () => {
       await axios
-        .get('http://localhost:5000/friends/' + localStorage.getItem('userId'))
+        .get("http://localhost:5000/friends/" + localStorage.getItem("userId"))
         .then((res) => {
           setFriends(res.data.users);
           console.log(res.data.users);
@@ -133,21 +132,21 @@ const CreateEvent = ({ open, handleClose }) => {
   };
 
   const handleSignIn = async () => {
-    const emailError = input.email === '' ? 'This field cannot be empty' : '';
+    const emailError = input.email === "" ? "This field cannot be empty" : "";
 
     const passwordError =
-      input.password.length < 8 ? 'You have to invite at least one friend' : '';
+      input.password.length < 8 ? "You have to invite at least one friend" : "";
 
-    if (emailError === '' && passwordError === '') {
-      console.log('success');
+    if (emailError === "" && passwordError === "") {
+      console.log("success");
     } else setError({ email: emailError, password: passwordError });
 
     if (coordinates.lat === 0 || coordinates.lng === 0) {
-      setError({ ...error, coordinates: 'Please select a location' });
+      setError({ ...error, coordinates: "Please select a location" });
     }
 
     await axios
-      .post('http://localhost:5000/events', {
+      .post("http://localhost:5000/events", {
         name: input.email,
         latitude: coordinates.lat,
         longitude: coordinates.lng,
@@ -160,12 +159,12 @@ const CreateEvent = ({ open, handleClose }) => {
         for (let i = 0; i < friends.length; i++) {
           for (let j = 0; j < personName.length; j++) {
             if (
-              friends[i].firstname + ' ' + friends[i].lastname ===
+              friends[i].firstname + " " + friends[i].lastname ===
               personName[j]
             ) {
               prom_all.push(
-                axios.post('http://localhost:5000/notif', {
-                  id_from: localStorage.getItem('userId'),
+                axios.post("http://localhost:5000/notif", {
+                  id_from: localStorage.getItem("userId"),
                   id_to: friends[i].id,
                   event_id: res.data.event.id,
                 })
@@ -189,7 +188,7 @@ const CreateEvent = ({ open, handleClose }) => {
     } = event;
     setPersonName(
       // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value
+      typeof value === "string" ? value.split(",") : value
     );
   };
 
@@ -206,29 +205,29 @@ const CreateEvent = ({ open, handleClose }) => {
 
         <Paper className={classes.inputContainer}>
           <TextField
-            error={error.email === '' ? false : true}
+            error={error.email === "" ? false : true}
             required
             label="Event Name"
             defaultValue="email@someone.com"
             helperText={error.email}
-            onChange={(ev) => handleChange(ev, 'email')}
+            onChange={(ev) => handleChange(ev, "email")}
             value={input.email}
             className={classes.inputField}
             variant="filled"
             InputLabelProps={{
               sx: {
-                color: '#8c8c8c',
+                color: "#8c8c8c",
               },
             }}
           />
         </Paper>
 
-        <FormControl sx={{ width: '100%', height: 'fit-content' }}>
+        <FormControl sx={{ width: "100%", height: "fit-content" }}>
           <InputLabel>Name</InputLabel>
           <Paper
             sx={{
-              width: '100%',
-              height: '55px',
+              width: "100%",
+              height: "55px",
             }}
           >
             <Select
@@ -244,10 +243,10 @@ const CreateEvent = ({ open, handleClose }) => {
               {friends.map((friend) => (
                 <MenuItem
                   key={friend.id}
-                  value={friend.firstname + ' ' + friend.lastname}
+                  value={friend.firstname + " " + friend.lastname}
                   // style={getStyles(name, personName, theme)}
                 >
-                  {friend.firstname + ' ' + friend.lastname}
+                  {friend.firstname + " " + friend.lastname}
                 </MenuItem>
               ))}
             </Select>
@@ -256,14 +255,14 @@ const CreateEvent = ({ open, handleClose }) => {
 
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            width: '100%',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            marginBottom: '30px',
-            marginTop: '10px',
-            flexWrap: 'wrap',
+            display: "flex",
+            flexDirection: "row",
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            marginBottom: "30px",
+            marginTop: "10px",
+            flexWrap: "wrap",
           }}
         >
           {personName.map((friend, index) => (
@@ -293,7 +292,7 @@ const CreateEvent = ({ open, handleClose }) => {
         <Map onCoordinatesChange={onCoordinatesChange} />
 
         <Box
-          sx={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}
+          sx={{ display: "flex", width: "100%", justifyContent: "flex-end" }}
         >
           <Button
             variant="contained"

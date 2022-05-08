@@ -1,33 +1,30 @@
-import React from 'react';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { getThemeOptions } from './resources/theme';
+import React from "react";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { getThemeOptions } from "./resources/theme";
 
 //Pages
-import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
-import ResetPassword from './pages/auth/ResetPassword';
-import Feed from './pages/main/Feed';
-import Memories from './pages/main/Memories';
-import LeaderBoard from './pages/main/LeaderBoard';
-import Profile from './pages/main/Profile';
-import NotFound from './pages/main/NotFound';
-import Notifications from './pages/main/Notifications';
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import ResetPassword from "./pages/auth/ResetPassword";
+import PageLayout from "./pages/main/PageLayout";
+import NotFound from "./pages/main/NotFound";
+import Notifications from "./pages/main/Notifications";
 
 export const ColorModeContext = React.createContext({
-  toggleColorMode: () => {}
+  toggleColorMode: () => {},
 });
 
 const App = () => {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const [mode, setMode] = React.useState(prefersDarkMode ? 'dark' : 'light');
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  const [mode, setMode] = React.useState(prefersDarkMode ? "dark" : "light");
   const colorMode = React.useMemo(
     () => ({
       // The dark mode switch would invoke this method
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-      }
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+      },
     }),
     []
   );
@@ -40,11 +37,9 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>
-            <Route path="feed" element={<Feed />} />
-            <Route path="scores" element={<LeaderBoard />} />
-            <Route path="memories" element={<Memories />} />
-            <Route path="profile" element={<Profile />} />
+            <Route index element={<PageLayout />} />
             <Route path="notifications" element={<Notifications />} />
+
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Register />} />
             <Route path="reset-pass" element={<ResetPassword />} />

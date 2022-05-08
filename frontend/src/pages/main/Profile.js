@@ -1,5 +1,4 @@
 import React from "react";
-import PageLayout from "./PageLayout";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -33,7 +32,7 @@ const Profile = () => {
   }
 
   return (
-    <PageLayout title="Profile">
+    <>
       <Box
         sx={{
           display: "flex",
@@ -61,7 +60,7 @@ const Profile = () => {
         </Tabs>
       </Box>
       {value === 0 && <UserLevel />}
-    </PageLayout>
+    </>
   );
 };
 
