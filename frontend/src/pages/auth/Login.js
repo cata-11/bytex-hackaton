@@ -1,37 +1,39 @@
-import * as React from 'react';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
+import * as React from "react";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormControl from "@mui/material/FormControl";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 
-import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/system/Box';
+import Container from "@mui/material/Container";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/system/Box";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import { loginUser, validateEmail } from '../../resources/helpers/authHelper';
+import { loginUser, validateEmail } from "../../resources/helpers/authHelper";
 
-import BaseSnackbar from '../../components/BaseSnackbar';
+import BaseSnackbar from "../../components/BaseSnackbar";
 
-import { useContext } from 'react';
-import UserContext from '../../resources/context/UserContext';
+import { useContext } from "react";
+import UserContext from "../../resources/context/UserContext";
 
 export default function Login() {
   const [values, setValues] = React.useState({
-    email: '',
-    password: '',
-    showPassword: false
+    email: "",
+    password: "",
+    showPassword: false,
   });
-  const [error, setError] = React.useState({ email: '', password: '' });
+  const [error, setError] = React.useState({ email: "", password: "" });
 
-  const [backendError, setBackendError] = React.useState('');
+  const [backendError, setBackendError] = React.useState("");
+  const navigate = useNavigate();
+  const { authenticateUser } = useContext(UserContext);
 
   const handleChange = (event, prop) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -40,7 +42,7 @@ export default function Login() {
   const handleClickShowPassword = () => {
     setValues({
       ...values,
-      showPassword: !values.showPassword
+      showPassword: !values.showPassword,
     });
   };
 
@@ -48,42 +50,36 @@ export default function Login() {
     event.preventDefault();
   };
 
-  const navigate = useNavigate();
-
-  const userCtx = useContext(UserContext);
-
   const setStorage = (payload) => {
-    localStorage.setItem('token', payload.token);
-    localStorage.setItem('email', payload.email);
-    localStorage.setItem('firstName', payload.firstname);
-    localStorage.setItem('lastName', payload.lastname);
-    localStorage.setItem('username', payload.username);
-    localStorage.setItem('userId', payload.id);
-    localStorage.setItem('score', payload.score);
+    localStorage.setItem("token", payload.token);
+    localStorage.setItem("email", payload.email);
+    localStorage.setItem("firstName", payload.firstname);
+    localStorage.setItem("lastName", payload.lastname);
+    localStorage.setItem("username", payload.username);
+    localStorage.setItem("userId", payload.id);
+    localStorage.setItem("score", payload.score);
   };
-
-  const authUser = () => userCtx.authenticateUser();
 
   const loginUserHandler = async () => {
     let emailError =
-      values.email === '' || !validateEmail(values.email)
-        ? 'Please provide a valid email'
-        : '';
+      values.email === "" || !validateEmail(values.email)
+        ? "Please provide a valid email"
+        : "";
 
     let passwordError =
-      values.password === '' ? 'Please provide a password' : '';
+      values.password === "" ? "Please provide a password" : "";
 
-    if (emailError === '' && passwordError === '') {
-      setBackendError('');
+    if (emailError === "" && passwordError === "") {
+      setBackendError("");
       try {
         const response = await loginUser(values);
         if (response.statusCode) {
           setBackendError(response.message);
-          setError({ email: '', password: '' });
+          setError({ email: "", password: "" });
         } else {
           setStorage(response);
-          authUser();
-          navigate('/home');
+          authenticateUser();
+          navigate("/home");
         }
       } catch (err) {
         console.log(err);
@@ -96,10 +92,10 @@ export default function Login() {
       <Container
         maxWidth="xs"
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column'
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
         }}
       >
         <Typography
@@ -117,39 +113,39 @@ export default function Login() {
           variant="h5"
           fontFamily="sans-serif"
           sx={{
-            textAlign: 'center'
+            textAlign: "center",
           }}
         >
-          Welcome back you've been missed !
+          Welcome back, you've been missed!
         </Typography>
 
-        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+        <FormControl sx={{ m: 1, width: "100%" }} variant="outlined">
           <TextField
             id="outlined-email"
             type="email"
             value={values.email}
             onChange={(event) => {
-              handleChange(event, 'email');
+              handleChange(event, "email");
             }}
-            error={error.email === '' ? false : true}
+            error={error.email === "" ? false : true}
             label="Email"
           />
           <Typography
             sx={{
-              color: 'red'
+              color: "red",
             }}
           >
             {error.email}
           </Typography>
         </FormControl>
 
-        <FormControl sx={{ mt: 1, width: '100%' }} variant="outlined">
+        <FormControl sx={{ mt: 1, width: "100%" }} variant="outlined">
           <TextField
             id="outlined-adornment-password"
-            type={values.showPassword ? 'text' : 'password'}
+            type={values.showPassword ? "text" : "password"}
             value={values.password}
-            onChange={(event) => handleChange(event, 'password')}
-            error={error.password === '' ? false : true}
+            onChange={(event) => handleChange(event, "password")}
+            error={error.password === "" ? false : true}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -166,7 +162,7 @@ export default function Login() {
           />
           <Typography
             sx={{
-              color: 'red'
+              color: "red",
             }}
           >
             {error.password}
@@ -177,27 +173,27 @@ export default function Login() {
           variant="contained"
           color="secondary"
           size="large"
-          sx={{ mt: 3, display: 'flex', width: '100%' }}
+          sx={{ mt: 3, display: "flex", width: "100%", textTransform: "none" }}
           onClick={loginUserHandler}
         >
-          sign in
+          Sign in
         </Button>
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: "100%" }}>
           <Divider variant="fullWidth" sx={{ mt: 3, mb: 3 }} />
         </Box>
 
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Typography
             color="#696969"
             fontFamily="sans-serif"
             sx={{
-              textAlign: 'center'
+              textAlign: "center",
             }}
           >
             New here ?
@@ -206,10 +202,10 @@ export default function Login() {
             variant="outlined"
             component={Link}
             to="/signup"
-            sx={{ ml: 2 }}
+            sx={{ ml: 2, textTransform: "none" }}
             color="secondary"
           >
-            SignUp
+            Sign up
           </Button>
         </Box>
       </Container>

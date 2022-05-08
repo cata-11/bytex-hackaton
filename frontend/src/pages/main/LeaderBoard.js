@@ -11,17 +11,13 @@ import UserContext from '../../resources/context/UserContext';
 const BASE_URL = 'http://localhost:5000';
 
 export default function LeaderBoard() {
+  const [loadedLeaderBoard, setLoadedLeaderBoard] = useState([]);
+  const [filter, setFilter] = useState(false);
+
   const userCtx = useContext(UserContext);
 
-  const userIsAuth = userCtx.isAuthenticated();
-  let userId = null;
-  if (userIsAuth) {
-    userId = userCtx.getUserId();
-  }
+  const userId = userCtx.getUserId();
 
-  const [loadedLeaderBoard, setLoadedLeaderBoard] = useState([]);
-
-  const [filter, setFilter] = useState(false);
   const toggleFilter = (e) => {
     let btn = e.target.innerText;
     if (btn === 'ALL') {
