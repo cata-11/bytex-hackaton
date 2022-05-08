@@ -8,6 +8,7 @@ router.post('/signup', controller.signup);
 router.post('/login', controller.login);
 router.put('/points', controller.addPoints);
 router.get('/users/:username', controller.findByUsername);
+router.get('/users/:id', controller.findById);
 router.get('/leaderboard', controller.getLeaderboard);
 router.get('/leaderboard/:id_from', controller.getLeaderboardFriends);
 router.put('/users/setLatLong', controller.setLatLong);
