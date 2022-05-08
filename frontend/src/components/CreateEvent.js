@@ -114,10 +114,12 @@ const CreateEvent = ({ open, handleClose }) => {
 
   useEffect(() => {
     (async () => {
-      await axios.get('http://localhost:5000/friends/2').then((res) => {
-        setFriends(res.data.users);
-        console.log(res.data.users);
-      });
+      await axios
+        .get('http://localhost:5000/friends/' + localStorage.getItem('userId'))
+        .then((res) => {
+          setFriends(res.data.users);
+          console.log(res.data.users);
+        });
     })();
   }, []);
 
@@ -163,7 +165,7 @@ const CreateEvent = ({ open, handleClose }) => {
             ) {
               prom_all.push(
                 axios.post('http://localhost:5000/notif', {
-                  id_from: 2,
+                  id_from: localStorage.getItem('userId'),
                   id_to: friends[i].id,
                   event_id: res.data.event.id,
                 })
@@ -298,7 +300,7 @@ const CreateEvent = ({ open, handleClose }) => {
             className={classes.signInButton}
             onClick={handleSignIn}
           >
-            Next
+            Done
           </Button>
         </Box>
       </Box>
