@@ -66,7 +66,7 @@ export default function LeaderBoard() {
   ));
 
   return (
-    <PageLayout>
+    <PageLayout title="Leaderboard">
       <Button color="secondary" onClick={toggleFilter} variant="contained">
         All
       </Button>

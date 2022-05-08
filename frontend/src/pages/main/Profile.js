@@ -32,7 +32,7 @@ const Profile = () => {
   const [componentName, setComponent] = useState('badges');
 
   return (
-    <PageLayout>
+    <PageLayout title="Profile">
       <Box
         sx={{
           display: 'flex',

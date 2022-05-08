@@ -6,7 +6,7 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 
 const Memories = () => {
   return (
-    <PageLayout>
+    <PageLayout title="Memories">
       <ImageList
         // Reemove scrollbar
         sx={{ height: '97%' }}
@@ -18,9 +18,8 @@ const Memories = () => {
         {[...Array(20)].map((x, i) => (
           <ImageListItem key={i}>
             <img
+              alt="img"
               src={'https://source.unsplash.com/random/' + i}
-              // srcSet={'https://source.unsplash.com/random'}
-              // alt={item.title}
               loading="lazy"
             />
             <ImageListItemBar position="bottom" title={'1 APR'} />

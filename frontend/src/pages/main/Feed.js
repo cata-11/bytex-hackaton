@@ -19,7 +19,7 @@ const Feed = () => {
   }
 
   return (
-    <PageLayout>
+    <PageLayout title="Feed">
       <Box
         sx={{
           width: '100%',
