@@ -14,7 +14,6 @@ const Notification = db.define(
 
         id_from: {
             type: Sequelize.BIGINT,
-            primaryKey: true,
             references: {
                 model: User,
                 key: "id",
@@ -23,7 +22,6 @@ const Notification = db.define(
 
         id_to: {
             type: Sequelize.BIGINT,
-            primaryKey: true,
             references: {
                 model: User,
                 key: "id",

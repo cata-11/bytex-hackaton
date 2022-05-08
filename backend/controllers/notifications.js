@@ -26,7 +26,7 @@ exports.createNotif = (req, res, next) => {
 exports.getNotifsOfUser = (req, res, next) => {
     const id_to = req.params.id_user;
 
-    Notification.findAll({ where: { id_to: id_to } })
+    Notification.findAll({ where: { id_to: id_to, is_new: true } })
         .then(result => {
             res.status(201).json({
                 notifications: result,
