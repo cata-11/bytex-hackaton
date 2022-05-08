@@ -1,31 +1,31 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
+import React from 'react';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+// import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import IconButton from "@mui/material/IconButton";
+// import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+// import IconButton from '@mui/material/IconButton';
 
-import beer1 from "../assets/beer1.jpg";
-import beer2 from "../assets/beer2.jpg";
-import beer3 from "../assets/beer3.jpg";
-import beer4 from "../assets/beer4.jpg";
+import beer1 from '../assets/beer1.jpg';
+import beer2 from '../assets/beer2.jpg';
+import beer3 from '../assets/beer3.jpg';
+import beer4 from '../assets/beer4.jpg';
 
-import Avatar from "@mui/material/Avatar";
-import { useTheme } from "@mui/material/styles";
+import Avatar from '@mui/material/Avatar';
+import { useTheme } from '@mui/material/styles';
 
 function srcset(image, size, rows = 1, cols = 1) {
   return {
     src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
     srcSet: `${image}?w=${size * cols}&h=${
       size * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
+    }&fit=crop&auto=format&dpr=2 2x`
   };
 }
 
@@ -35,25 +35,25 @@ const EventCard = () => {
   return (
     <Card
       sx={{
-        minWidth: "250px",
-        borderRadius: "15px",
-        display: "flex",
-        flexDirection: "column",
-        margin: "25px 0px",
+        minWidth: '250px',
+        borderRadius: '15px',
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '25px 0px'
       }}
     >
       <CardContent>
         <Box
           sx={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            alignItems: "center",
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center'
           }}
         >
           <Avatar sx={{ width: 45, height: 45 }}>M</Avatar>
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography sx={{ fontSize: 16 }} ml="10px">
               mihaita_boss87
             </Typography>
@@ -63,19 +63,19 @@ const EventCard = () => {
           </Box>
         </Box>
         <Box
-          sx={{ display: "flex", flexDirection: "column", margin: "25px 0px" }}
+          sx={{ display: 'flex', flexDirection: 'column', margin: '25px 0px' }}
         >
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center'
             }}
           >
             <LocationOnIcon sx={{ color: theme.palette.text.secondary }} />
             <Typography
-              sx={{ fontSize: 14, textDecoration: "underline" }}
+              sx={{ fontSize: 14, textDecoration: 'underline' }}
               color="text.secondary"
               ml="10px"
             >
@@ -84,16 +84,16 @@ const EventCard = () => {
           </Box>
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              marginTop: "10px",
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              marginTop: '10px'
             }}
           >
             <PeopleAltIcon sx={{ color: theme.palette.text.secondary }} />
             <Typography
-              sx={{ fontSize: 14, textDecoration: "underline" }}
+              sx={{ fontSize: 14, textDecoration: 'underline' }}
               color="text.secondary"
               ml="10px"
             >
@@ -118,7 +118,7 @@ const EventCard = () => {
           ))}
         </ImageList>
       </CardContent>
-      <CardActions>
+      {/* <CardActions>
         <Box
           sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
         >
@@ -133,7 +133,7 @@ const EventCard = () => {
             3
           </Typography>
         </Box>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 };
@@ -141,23 +141,23 @@ const EventCard = () => {
 const itemData = [
   {
     img: beer1,
-    title: "Breakfast",
+    title: 'Breakfast',
     rows: 2,
-    cols: 2,
+    cols: 2
   },
   {
     img: beer2,
-    title: "Burger",
+    title: 'Burger'
   },
   {
     img: beer3,
-    title: "Camera",
+    title: 'Camera'
   },
   {
     img: beer4,
-    title: "Coffee",
-    cols: 2,
-  },
+    title: 'Coffee',
+    cols: 2
+  }
 ];
 
 export default EventCard;

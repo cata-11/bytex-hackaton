@@ -1,38 +1,86 @@
 import * as React from 'react';
 import List from '@mui/material/List';
 import PageLayout from './PageLayout';
+import Button from '@mui/material/Button';
 
 import BoardListItem from './BoardListItem';
 
+import { useContext, useEffect, useState } from 'react';
+
+import UserContext from '../../resources/context/UserContext';
+
+const BASE_URL = 'http://localhost:5000';
+
 export default function LeaderBoard() {
-  const users = [
-    {
-      id: '1',
-      firstName: 'Name',
-      lastName: 'Surname',
-      username: 'username',
-      score: 10
-    },
-    {
-      id: '2',
-      firstName: 'Name',
-      lastName: 'Surname',
-      username: 'username',
-      score: 10
-    },
-    {
-      id: '3',
-      firstName: 'Name',
-      lastName: 'Surname',
-      username: 'username',
-      score: 10
+  const userCtx = useContext(UserContext);
+
+  const userIsAuth = userCtx.isAuthenticated();
+  let userId = null;
+  if (userIsAuth) {
+    userId = userCtx.getUserId();
+  }
+
+  const [loadedLeaderBoard, setLoadedLeaderBoard] = useState([]);
+
+  const [filter, setFilter] = useState(false);
+  const toggleFilter = (e) => {
+    let btn = e.target.innerText;
+    if (btn === 'ALL') {
+      setFilter(false);
+    } else {
+      setFilter(true);
     }
-  ];
-  const ListItems = users.map((u) => <BoardListItem key={u.id} user={u} />);
+  };
+
+  useEffect(() => {
+    if (!filter) {
+      fetch(`${BASE_URL}/leaderboard`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setLoadedLeaderBoard([...res.leaderboard.rows]);
+          // console.log();
+        });
+    } else {
+      console.log(userId);
+      fetch(`${BASE_URL}/leaderboard/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          setLoadedLeaderBoard([...res.users]);
+        });
+    }
+  }, [filter, userId]);
+
+  const listItems = loadedLeaderBoard.map((u) => (
+    <BoardListItem key={u.id} user={u} />
+  ));
 
   return (
-    <PageLayout>
-      <List>{ListItems}</List>
+    <PageLayout title="Leaderboard">
+      <Button color="secondary" onClick={toggleFilter} variant="contained">
+        All
+      </Button>
+      <Button
+        color="secondary"
+        onClick={toggleFilter}
+        variant="contained"
+        sx={{
+          marginLeft: '.5rem'
+        }}
+      >
+        Friends
+      </Button>
+      <List>{listItems}</List>
     </PageLayout>
   );
 }

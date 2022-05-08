@@ -20,6 +20,9 @@ import { loginUser, validateEmail } from '../../resources/helpers/authHelper';
 
 import BaseSnackbar from '../../components/BaseSnackbar';
 
+import { useContext } from 'react';
+import UserContext from '../../resources/context/UserContext';
+
 export default function Login() {
   const [values, setValues] = React.useState({
     email: '',
@@ -47,6 +50,8 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  const userCtx = useContext(UserContext);
+
   const setStorage = (payload) => {
     localStorage.setItem('token', payload.token);
     localStorage.setItem('email', payload.email);
@@ -54,7 +59,10 @@ export default function Login() {
     localStorage.setItem('lastName', payload.lastname);
     localStorage.setItem('username', payload.username);
     localStorage.setItem('userId', payload.id);
+    localStorage.setItem('score', payload.score);
   };
+
+  const authUser = () => userCtx.authenticateUser();
 
   const loginUserHandler = async () => {
     let emailError =
@@ -74,6 +82,7 @@ export default function Login() {
           setError({ email: '', password: '' });
         } else {
           setStorage(response);
+          authUser();
           navigate('/home');
         }
       } catch (err) {
