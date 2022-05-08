@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import { List } from '@mui/material';
-import PageLayout from './PageLayout';
 
 import { useState, useEffect } from 'react';
 
@@ -40,12 +39,14 @@ export default function Notifications() {
     <EventInviteItem key={e.id} event={e} />
   ));
 
+  console.log("here")
+
   const friendsInviteList = loadedFriends.map((f) => (
     <FriendReqItem key={f.id} user={f} />
   ));
 
   return (
-    <PageLayout title="Notifications">
+    <>
       <Box sx={{ marginBottom: '1rem' }}>
         <Button
           color="secondary"
@@ -67,6 +68,6 @@ export default function Notifications() {
       </Box>
       {filter === 'events' && <List>{eventsInviteList}</List>}
       {filter === 'friends' && <List>{friendsInviteList}</List>}
-    </PageLayout>
+    </>
   );
 }
