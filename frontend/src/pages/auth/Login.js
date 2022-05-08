@@ -47,6 +47,15 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  const setStorage = (payload) => {
+    localStorage.setItem('token', payload.token);
+    localStorage.setItem('email', payload.email);
+    localStorage.setItem('firstName', payload.firstname);
+    localStorage.setItem('lastName', payload.lastname);
+    localStorage.setItem('username', payload.username);
+    localStorage.setItem('userId', payload.id);
+  };
+
   const loginUserHandler = async () => {
     let emailError =
       values.email === '' || !validateEmail(values.email)
@@ -64,6 +73,7 @@ export default function Login() {
           setBackendError(response.message);
           setError({ email: '', password: '' });
         } else {
+          setStorage(response);
           navigate('/home');
         }
       } catch (err) {
