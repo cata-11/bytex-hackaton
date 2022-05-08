@@ -11,6 +11,7 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import PageLayout from "./pages/main/PageLayout";
 import NotFound from "./pages/main/NotFound";
 import Notifications from "./pages/main/Notifications";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const ColorModeContext = React.createContext({
   toggleColorMode: () => {},
@@ -37,13 +38,15 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>
-            <Route index element={<PageLayout />} />
-            <Route path="notifications" element={<Notifications />} />
+            <Route exact path="/" element={<ProtectedRoute />}>
+              <Route path="/home" element={<PageLayout />} />
+              <Route path="notifications" element={<Notifications />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
 
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Register />} />
             <Route path="reset-pass" element={<ResetPassword />} />
-            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

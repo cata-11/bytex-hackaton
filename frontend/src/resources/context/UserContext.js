@@ -1,30 +1,23 @@
-import { createContext } from 'react';
+import { createContext } from "react";
 
 const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
   const authenticateUser = () => {
-    const isAuth = localStorage.getItem('id');
-
-    if (isAuth) {
-      localStorage.setItem('isAuthenticated', true);
-    } else {
-      localStorage.setItem('isAuthenticated', false);
-    }
+    localStorage.setItem("isAuthenticated", true);
   };
-
   const logoutUser = () => {
-    localStorage.setItem('isAuthenticated', false);
+    localStorage.setItem("isAuthenticated", false);
   };
+  const isAuthenticated = localStorage.getItem("isAuthenticated");
 
-  const isAuthenticated = () => localStorage.getItem('isAuthenticated');
-  const getUserId = () => localStorage.getItem('userId');
-  const getUsername = () => localStorage.getItem('username');
-  const getScore = () => localStorage.getItem('score');
+  const getUserId = () => localStorage.getItem("userId");
+  const getUsername = () => localStorage.getItem("username");
+  const getScore = () => localStorage.getItem("score");
   const getFullName = () => {
-    let name = localStorage.getItem('firstName');
-    let surname = localStorage.getItem('lastName');
-    return name + ' ' + surname;
+    let name = localStorage.getItem("firstName");
+    let surname = localStorage.getItem("lastName");
+    return name + " " + surname;
   };
 
   return (
@@ -36,7 +29,7 @@ export const UserContextProvider = ({ children }) => {
         getUserId,
         getUsername,
         getScore,
-        getFullName
+        getFullName,
       }}
     >
       {children}
