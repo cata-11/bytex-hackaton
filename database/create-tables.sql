@@ -1,8 +1,8 @@
-DROP TABLE users_friends;
 DROP TABLE users_events;
+DROP TABLE users_friends;
+DROP TABLE notifications;
 DROP TABLE users;
 DROP TABLE events;
-
 
 CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
@@ -36,9 +36,17 @@ CREATE TABLE users_friends (
 	PRIMARY KEY(id_from, id_to)
 );
 
+CREATE TABLE notifications (
+	id SERIAL PRIMARY KEY,
+	id_from BIGINT REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	id_to BIGINT REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	event_id BIGINT REFERENCES events(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 SELECT * FROM users;
 SELECT * FROM events;
 SELECT * FROM users_events;
 SELECT * FROM users_friends;
+SELECT * FROM notifications;
 
 
