@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -21,6 +21,7 @@ import { makeStyles } from '@mui/styles';
 import FriendChip from './FriendChip';
 
 import Map from './Map';
+const axios = require('axios');
 
 const useStyles = makeStyles({
   inputContainer: {
@@ -109,6 +110,16 @@ const CreateEvent = ({ open, handleClose }) => {
     lat: 0,
     lng: 0,
   });
+  const [friends, setFriends] = React.useState([]);
+
+  useEffect(() => {
+    (async () => {
+      await axios.get('http://localhost:5000/friends/2').then((res) => {
+        setFriends(res.data.users);
+        console.log(res.data.users);
+      });
+    })();
+  }, []);
 
   const onCoordinatesChange = (coordinates) => {
     console.log(coordinates);
@@ -119,7 +130,7 @@ const CreateEvent = ({ open, handleClose }) => {
     setInput({ ...input, [key]: event.target.value });
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     const emailError = input.email === '' ? 'This field cannot be empty' : '';
 
     const passwordError =
@@ -132,6 +143,40 @@ const CreateEvent = ({ open, handleClose }) => {
     if (coordinates.lat === 0 || coordinates.lng === 0) {
       setError({ ...error, coordinates: 'Please select a location' });
     }
+
+    await axios
+      .post('http://localhost:5000/events', {
+        name: input.email,
+        latitude: coordinates.lat,
+        longitude: coordinates.lng,
+        date: value,
+      })
+      .then(async (res) => {
+        console.log(res.data);
+        const prom_all = [];
+
+        for (let i = 0; i < friends.length; i++) {
+          for (let j = 0; j < personName.length; j++) {
+            if (
+              friends[i].firstname + ' ' + friends[i].lastname ===
+              personName[j]
+            ) {
+              prom_all.push(
+                axios.post('http://localhost:5000/notif', {
+                  id_from: 2,
+                  id_to: friends[i].id,
+                  event_id: res.data.event.id,
+                })
+              );
+            }
+          }
+        }
+
+        await Promise.all(prom_all);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const classes = useStyles();
@@ -194,13 +239,13 @@ const CreateEvent = ({ open, handleClose }) => {
               }
               MenuProps={MenuProps}
             >
-              {names.map((name) => (
+              {friends.map((friend) => (
                 <MenuItem
-                  key={name}
-                  value={name}
-                  style={getStyles(name, personName, theme)}
+                  key={friend.id}
+                  value={friend.firstname + ' ' + friend.lastname}
+                  // style={getStyles(name, personName, theme)}
                 >
-                  {name}
+                  {friend.firstname + ' ' + friend.lastname}
                 </MenuItem>
               ))}
             </Select>
