@@ -12,8 +12,8 @@ let mrk = null;
 export default function MapBox({ onCoordinatesChange }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lng, setLng] = useState(-70.9);
-  const [lat, setLat] = useState(42.35);
+  const [lng, setLng] = useState(27.587914);
+  const [lat, setLat] = useState(47.151726);
   const [zoom, setZoom] = useState(9);
 
   useEffect(() => {

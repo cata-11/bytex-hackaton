@@ -39,7 +39,8 @@ export default function Events() {
             id: event.id,
             lat: event.latitude,
             lng: event.longitude,
-            name: res.data.results[0].formatted_address,
+            adress: res.data.results[0].formatted_address,
+            name: event.name,
           };
           setPlaces((prev) => [...prev, pl]);
         }
