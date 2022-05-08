@@ -7,184 +7,189 @@ const jsonToken = require('jsonwebtoken');
 const UserFriend = require('../models/user-friend');
 
 exports.signup = (req, res, next) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    const firstname = req.body.firstname;
-    const lastname = req.body.lastname;
-    const username = req.body.username;
-    const latitude = 0.0;
-    const longitude = 0.0;
+  const email = req.body.email;
+  const password = req.body.password;
+  const firstname = req.body.firstname;
+  const lastname = req.body.lastname;
+  const username = req.body.username;
+  const latitude = 0.0;
+  const longitude = 0.0;
 
-    User.findOne({
-            where: Sequelize.or({
-                email: email
-            }, {
-                username: username
-            })
-        })
-        .then((result) => {
-            if (result) {
-                let type = result.email === email ? 'email' : 'username';
-                const err = new Error(`User with this ${type} already exists !`);
-                err.statusCode = 409;
-                throw err;
-            }
-            return bcrypt.hash(password, 12);
-        })
-        .then((result) => {
-            const user = User.create({
-                email: email,
-                password: result,
-                firstname: firstname,
-                lastname: lastname,
-                username: username,
-                latitude: latitude,
-                longitude: longitude
-            });
-            return user;
-        })
-        .then(() => {
-            res.status(201).json({
-                msg: `Account created succesfully!`
-            });
-        })
-        .catch((err) => next(err));
+  User.findOne({
+    where: Sequelize.or(
+      {
+        email: email,
+      },
+      {
+        username: username,
+      }
+    ),
+  })
+    .then((result) => {
+      if (result) {
+        let type = result.email === email ? 'email' : 'username';
+        const err = new Error(`User with this ${type} already exists !`);
+        err.statusCode = 409;
+        throw err;
+      }
+      return bcrypt.hash(password, 12);
+    })
+    .then((result) => {
+      const user = User.create({
+        email: email,
+        password: result,
+        firstname: firstname,
+        lastname: lastname,
+        username: username,
+        latitude: latitude,
+        longitude: longitude,
+      });
+      return user;
+    })
+    .then(() => {
+      res.status(201).json({
+        msg: `Account created succesfully!`,
+      });
+    })
+    .catch((err) => next(err));
 };
 
 exports.login = (req, res, next) => {
-    const email = req.body.email;
-    const password = req.body.password;
+  const email = req.body.email;
+  const password = req.body.password;
 
-    let user;
+  let user;
 
-    User.findOne({ where: { email: email } })
-        .then((result) => {
-            if (!result) {
-                const err = new Error('User with such email not found.');
-                err.statusCode = 404;
-                throw err;
-            }
-            user = result;
-            return bcrypt.compare(password, result.password);
-        })
-        .then((result) => {
-            if (!result) {
-                const err = new Error('Wrong password.');
-                err.statusCode = 404;
-                throw err;
-            }
+  User.findOne({ where: { email: email } })
+    .then((result) => {
+      if (!result) {
+        const err = new Error('User with such email not found.');
+        err.statusCode = 404;
+        throw err;
+      }
+      user = result;
+      return bcrypt.compare(password, result.password);
+    })
+    .then((result) => {
+      if (!result) {
+        const err = new Error('Wrong password.');
+        err.statusCode = 404;
+        throw err;
+      }
 
-            const token = jsonToken.sign({ email: user.email, nickname: user.nickname },
-                'supersecretkey', {
-                    expiresIn: '1h'
-                }
-            );
+      const token = jsonToken.sign(
+        { email: user.email, nickname: user.nickname },
+        'supersecretkey',
+        {
+          expiresIn: '1h',
+        }
+      );
 
-            res.status(200).json({
-                token: token,
-                username: user.username,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email,
-                id: user.id,
-                score: user.score
-            });
-        })
-        .catch((err) => next(err));
+      res.status(200).json({
+        token: token,
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        id: user.id,
+        score: user.score,
+      });
+    })
+    .catch((err) => next(err));
 };
 
 exports.addPoints = (req, res, next) => {
-    const id = req.body.id;
-    let points = parseInt(req.body.points);
-    const pointsToAdd = points;
+  const id = req.body.id;
+  let points = parseInt(req.body.points);
+  const pointsToAdd = points;
 
-    User.findOne({ where: { id: id } })
-        .then((result) => {
-            points = points + parseInt(result.score);
-            User.update({ score: points }, { where: { id: id } })
-                .then((result2) => {
-                    res.status(205).json({
-                        msg: `Added ${pointsToAdd} points to user.`
-                    });
-                })
-                .catch((err) => next(err));
+  User.findOne({ where: { id: id } })
+    .then((result) => {
+      points = points + parseInt(result.score);
+      User.update({ score: points }, { where: { id: id } })
+        .then((result2) => {
+          res.status(205).json({
+            msg: `Added ${pointsToAdd} points to user.`,
+          });
         })
         .catch((err) => next(err));
+    })
+    .catch((err) => next(err));
 };
 
 exports.findByUsername = (req, res, next) => {
-    const username = req.params.username;
+  const username = req.params.username;
 
-    User.findOne({ where: { username: username } })
-        .then((result) => {
-            res.status(200).json({
-                user: result
-            });
-        })
-        .catch((err) => next(err));
+  User.findOne({ where: { username: username } })
+    .then((result) => {
+      res.status(200).json({
+        user: result,
+      });
+    })
+    .catch((err) => next(err));
 };
 
 exports.findById = (req, res, next) => {
-    const id = req.params.id;
+  const id = req.params.id;
 
-    User.findOne({ where: { id: id } })
-        .then((result) => {
-            res.status(200).json({
-                user: result
-            });
-        })
-        .catch((err) => next(err));
+  User.findOne({ where: { id: id } })
+    .then((result) => {
+      res.status(200).json({
+        user: result,
+      });
+    })
+    .catch((err) => next(err));
 };
 
-
 exports.getLeaderboard = (req, res, next) => {
-    User.findAndCountAll({
-            order: [
-                ['score', 'DESC']
-            ]
-        })
-        .then((result) => {
-            res.status(200).json({
-                leaderboard: result
-            });
-        })
-        .catch((err) => next(err));
+  User.findAndCountAll({
+    order: [['score', 'DESC']],
+  })
+    .then((result) => {
+      res.status(200).json({
+        leaderboard: result,
+      });
+    })
+    .catch((err) => next(err));
 };
 
 exports.getLeaderboardFriends = (req, res, next) => {
-    const id_from = req.params.id_from;
-    const arr = [];
+  const id_from = req.params.id_from;
+  const arr = [];
 
-    UserFriend.findAll({ where: { id_from: id_from } })
-        .then((result) => {
-            result.forEach((item, index) => {
-                const id = item.dataValues.id_to;
-                arr.push(User.findOne({ where: { id: id } }));
-            });
+  UserFriend.findAll({ where: { id_from: id_from } })
+    .then((result) => {
+      result.forEach((item, index) => {
+        const id = item.dataValues.id_to;
+        arr.push(User.findOne({ where: { id: id } }));
+      });
 
-            Promise.all(arr)
-                .then((result2) => {
-                    result2.sort((a, b) => a.score < b.score);
+      Promise.all(arr)
+        .then((result2) => {
+          result2.sort((a, b) => a.score < b.score);
 
-                    res.status(200).json({
-                        users: result2
-                    });
-                })
-                .catch((err) => next(err));
+          res.status(200).json({
+            users: result2,
+          });
         })
         .catch((err) => next(err));
+    })
+    .catch((err) => next(err));
 };
 
 exports.setLatLong = (req, res, next) => {
-    const id = req.body.id;
-    const latitude = req.body.latitude;
-    const longitude = req.body.longitude;
+  const id = req.body.id;
+  const latitude = req.body.latitude;
+  const longitude = req.body.longitude;
 
-    User.update({ latitude: latitude, longitude: longitude }, { where: { id: id } })
-        .then((result) => {
-            res.status(205).json({
-                msg: "Updated the user's coordinates."
-            });
-        })
-        .catch((err) => next(err));
+  User.update(
+    { latitude: latitude, longitude: longitude },
+    { where: { id: id } }
+  )
+    .then((result) => {
+      res.status(205).json({
+        msg: "Updated the user's coordinates.",
+      });
+    })
+    .catch((err) => next(err));
 };

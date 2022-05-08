@@ -175,6 +175,14 @@ const CreateEvent = ({ open, handleClose }) => {
         console.log(res.data);
         const prom_all = [];
 
+        prom_all.push(
+          axios.post('http://localhost:5000/notif', {
+            id_from: localStorage.getItem('userId'),
+            id_to: localStorage.getItem('userId'),
+            event_id: res.data.event.id,
+          })
+        );
+
         for (let i = 0; i < friends.length; i++) {
           for (let j = 0; j < personName.length; j++) {
             if (
