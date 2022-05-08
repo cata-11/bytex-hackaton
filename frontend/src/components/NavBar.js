@@ -31,7 +31,7 @@ const NavBar = () => {
   return (
     <>
       <BottomNavigation
-        sx={{ width: "100%" }}
+        sx={{ width: "100%", borderRadius: "15px", marginBottom: "10px" }}
         value={value}
         onChange={handleChange}
       >
@@ -39,11 +39,13 @@ const NavBar = () => {
           label="Feed"
           value="/feed"
           icon={<DynamicFeedIcon />}
+          sx={{ padding: "5px" }}
         />
         <BottomNavigationAction
           label="Scores"
           value="/scores"
           icon={<LeaderboardIcon />}
+          sx={{ padding: "5px" }}
         />
         <IconButton onClick={handleOpen}>
           <AddLocationAltIcon />
@@ -52,11 +54,13 @@ const NavBar = () => {
           label="Memories"
           value="/memories"
           icon={<InsertPhotoIcon />}
+          sx={{ padding: "5px" }}
         />
         <BottomNavigationAction
           label="Profile"
           value="/profile"
           icon={<PersonIcon />}
+          sx={{ padding: "5px" }}
         />
       </BottomNavigation>
       <CreateEvent handleClose={handleClose} open={open} />

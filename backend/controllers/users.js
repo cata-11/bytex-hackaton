@@ -48,7 +48,7 @@ exports.signup = (req, res, next) => {
                 msg: `Account created succesfully!`
             });
         })
-        .catch((err) => next(err));;
+        .catch((err) => next(err));
 };
 
 exports.login = (req, res, next) => {
@@ -102,7 +102,7 @@ exports.addPoints = (req, res, next) => {
             points = points + parseInt(result.score);
             User.update({ score: points }, { where: { id: id } })
                 .then((result2) => {
-                    res.status(201).json({
+                    res.status(205).json({
                         msg: `Added ${pointsToAdd} points to user.`
                     });
                 })
@@ -172,7 +172,7 @@ exports.setLatLong = (req, res, next) => {
 
     User.update({ latitude: latitude, longitude: longitude }, { where: { id: id } })
         .then(result => {
-            res.status(201).json({
+            res.status(205).json({
                 msg: "Updated the user's coordinates.",
             });
         })

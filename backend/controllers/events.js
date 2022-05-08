@@ -43,6 +43,18 @@ exports.findByName = (req, res, next) => {
         .catch((err) => next(err));
 }
 
+exports.findById = (req, res, next) => {
+    const id = req.params.id;
+
+    Event.findOne({ where: { id: id } })
+        .then((result) => {
+            res.status(200).json({
+                event: result
+            });
+        })
+        .catch((err) => next(err));
+}
+
 exports.addUserToEvent = (req, res, next) => {
     const user_id = req.params.user_id;
     const event_id = req.params.event_id;
