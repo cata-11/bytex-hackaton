@@ -55,10 +55,3 @@ exports.findById = (req, res, next) => {
     })
     .catch((err) => next(err));
 };
-
-exports.addUserToEvent = (req, res, next) => {
-  const user_id = req.params.user_id;
-  const event_id = req.params.event_id;
-
-  Event.Upda;
-};
