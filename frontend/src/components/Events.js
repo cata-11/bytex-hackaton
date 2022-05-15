@@ -31,7 +31,8 @@ export default function Events() {
   useEffect(() => {
     events.map((event) => {
       console.log(event);
-      const api = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${event.latitude},${event.longitude}&key=AIzaSyBa-slm6BMRwVIuR6zYz0wnzn-6tqCo4cw`;
+      const api_key = '';
+      const api = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${event.latitude},${event.longitude}&key=${api_key}`;
       axios.get(api).then((res) => {
         if (res.data.results.length > 0) {
           console.log(res.data.results[0].formatted_address);
