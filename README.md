@@ -1,3 +1,3 @@
 # bytex-hackaton
 
-![Demo](./demo.gif)
+![Demo](./app.gif)
