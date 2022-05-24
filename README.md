@@ -1,6 +1,6 @@
 # Bytex Hackathon 2022 💻
 
-This is a minimalist social media platform that focuses on bringing friends together in real life, creating awesome memories and finding new places. We've developed this application during FiiPractic Challenge 2022, an 24h hackathon hosted by [Bytex](https://bytex.net) and [ASII](https://www.asii.ro/), where our [team](#🏆-team-c12) took first place.
+This is a minimalist social media platform that focuses on bringing friends together in real life, creating awesome memories and finding new places. We've developed this application during FiiPractic Challenge 2022, an 24h hackathon hosted by [Bytex](https://bytex.net) and [ASII](https://www.asii.ro/), where our [team](#-team-c12) took first place.
 
 ## Main Concept
 
